@@ -25,6 +25,13 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,19 +89,20 @@ public class HomeFragment extends Fragment implements Transact{
                 wifi2.setImageResource(R.drawable.ic_vector);
 
 
-                text.setText("Connected to jarvis");
-                text.setTextColor(ctx.getResources().getColor(R.color.green_100));
+
+                getWaterFlowData();
 
 
-                if(utl.js.toJson(mScanResults).contains("jarvis")&&!utl.isConnected())
+
+                if(utl.js.toJson(mScanResults).contains("MONG_TEST")&&!utl.isConnected())
                 {
                     wifi2.setImageResource(R.drawable.ic_vector);
 
 
-                    text.setText("Connected to jarvis");
-                    text.setTextColor(ctx.getResources().getColor(R.color.green_100));
+                    text.setText("Connected to Device");
+                    text.setTextColor(ctx.getResources().getColor(R.color.connected));
 
-                    connect("jarvis","goforit@delhi");
+                    connect("MONG_TEST","password");
                    // utl.toast(ctx,"Connecting !!");
                 }
 
@@ -130,31 +138,36 @@ public class HomeFragment extends Fragment implements Transact{
 
         mWifiManager = (WifiManager) act.getSystemService(WIFI_SERVICE);
         try {
-            act.unregisterReceiver(mWifiScanReceiver); } catch (Exception e) {
-            e.printStackTrace();
-        }
+            act.unregisterReceiver(mWifiScanReceiver);
             act.registerReceiver(mWifiScanReceiver,
                     new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
             mWifiManager.startScan();
 
-
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
 
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
 
 
+
+                getWaterFlowData();
+            /*
+
                 utl.showDig(true,ctx);
 
                 mWifiManager.startScan();
 
-
+*/
 
             }
         });
 
        // utl.showDig(true,ctx);
 
+        getWaterFlowData();
 
         try {
 
@@ -204,8 +217,9 @@ public class HomeFragment extends Fragment implements Transact{
             {
                 wifi2.setImageResource(R.drawable.ic_vector);
 
-                text.setText("Connected to jarvis");
-                text.setTextColor(Color.parseColor("#2baf2b"));
+
+                getWaterFlowData();
+
             }
         }
 
@@ -218,6 +232,7 @@ public class HomeFragment extends Fragment implements Transact{
 
     TextView text;;
 
+/*
 
     private BroadcastReceiver WifiStateChangedReceiver
             = new BroadcastReceiver(){
@@ -252,6 +267,7 @@ public class HomeFragment extends Fragment implements Transact{
         }};
 
 
+*/
 
      WifiManager wifi;
 
@@ -418,8 +434,72 @@ public class HomeFragment extends Fragment implements Transact{
         wifi2.setImageResource(R.drawable.ic_vector);
 
 
-        text.setText("Connected to jarvis");
-        text.setTextColor(ctx.getResources().getColor(R.color.green_100));
+        getWaterFlowData();
+
+
+    }
+
+
+    public void getWaterFlowData()
+    {
+
+        text.setText("Connected to Device");
+        text.setTextColor(ctx.getResources().getColor(R.color.connected));
+
+        String url="http://192.168.4.1/rpc/read_water_flow";
+        utl.l(url);
+        JSONObject jo=new JSONObject();
+        try {
+            jo.put("api_key","AEZAKMIdbf");
+            jo.put("sensor_id",10);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        AndroidNetworking.post(url).addJSONObjectBody(jo).build().getAsJSONObject(new JSONObjectRequestListener() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                if(response.toString().toLowerCase().contains("success"))
+                {
+                    try {
+                        String re="::\n"+"Sensor 10 Val : "+response.getString("sensor_10")+
+                                "\n"+"Free RAM : "+response.getString("free_ram")+
+                                "\n"+"Uptime : "+response.getString("uptime")+
+                                "\n"+"Status : "+response.getString("status");
+
+
+                        text.setText("Device Connected\nSensor API Response\n" + re);
+
+
+
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+
+
+                    text.setText("Device Connected\nSensor API Response\n" + response.toString());
+                }
+                utl.l(response);
+
+
+
+            }
+
+            @Override
+            public void onError(ANError ANError) {
+
+                utl.l(ANError.getErrorDetail());
+                utl.l(ANError.getErrorBody());
+
+            }
+        });
+
+        ;
+
 
 
 

@@ -3,6 +3,7 @@ package in.hoptec.smartconnect;
 import android.app.Application;
 
 
+import com.androidnetworking.AndroidNetworking;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -22,6 +23,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
 
+        AndroidNetworking.initialize(this);
         Constants.init(this);
         initDB();
 
