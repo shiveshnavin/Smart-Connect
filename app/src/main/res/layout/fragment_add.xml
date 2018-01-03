@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_home"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/home_v_margin"
+    android:paddingLeft="@dimen/home_v_margin"
+    android:paddingRight="@dimen/home_v_margin"
+    android:paddingTop="@dimen/home_v_margin"
+    android:background="#fff"
+    tools:context="in.hoptec.smartconnect.fragments.HomeFragment"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <LinearLayout
+            android:background="@color/white"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:weightSum="1.2"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_marginLeft="3dp"
+                android:background="@drawable/round_filled"
+                android:src="@drawable/ic_launcher"
+                android:layout_width="80dp"
+                android:layout_height="80dp" />
+
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical"
+                android:layout_gravity="center_vertical"
+                android:minWidth="40dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+
+                <com.daniribalbert.customfontlib.views.CustomFontTextView
+                    android:layout_width="match_parent"
+                    android:layout_weight="0.8"
+                    android:layout_height="0dp"
+                    app:font="avenir-next-regular"
+                    android:gravity="left"
+                    android:text="TEXT"
+                    android:textColor="@color/grey_600"
+                    android:id="@+id/name"
+                    android:textSize="16sp" />
+
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0.2"
+                    android:weightSum="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <com.daniribalbert.customfontlib.views.CustomFontTextView
+                         android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:font="Roboto-Thin"
+                        android:gravity="left"
+                        android:text="2 Files"
+                        android:textColor="@color/secondary_text"
+                        android:id="@+id/btm_t0"
+                        android:textSize="12sp" />
+
+
+                    <com.daniribalbert.customfontlib.views.CustomFontTextView
+                         android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:font="Roboto-Thin"
+                        android:text="27 Views"
+                        android:textColor="@color/secondary_text"
+                        android:id="@+id/btm_t1"
+                        android:textSize="12sp" />
+
+
+                    <com.daniribalbert.customfontlib.views.CustomFontTextView
+                         android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:font="Roboto-Thin"
+                        android:text="24 Dec 2017"
+                        android:textColor="@color/secondary_text"
+                        android:id="@+id/btm_t2"
+                        android:textSize="12sp" />
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_weight="0.2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:src="@drawable/avd_cross"
+                    android:id="@+id/del"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+
+        <View
+            android:layout_marginTop="5dp"
+            android:background="@color/grey_400"
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"/>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <LinearLayout
+
+            android:orientation="vertical"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            >
+
+            <LinearLayout
+                android:weightSum="1"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                >
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="0dp"
+                     android:layout_weight="0.9"
+                    android:textColorHint="@color/colorAccent"
+
+                    app:hintAnimationEnabled="true"
+                    app:hintEnabled="true"
+                    android:layout_height="wrap_content">
+
+                    <com.daniribalbert.customfontlib.views.CustomFontEditText
+                        android:layout_margin="10dp"
+                        android:hint="Name a new box "
+                        android:textSize="13sp"
+                        android:singleLine="true"
+                        android:imeActionLabel="ADD"
+                        android:maxLines="1"
+                        android:id="@+id/box_name"
+                        android:imeOptions="actionGo"
+                        android:textColor="@color/grey_800"
+                        app:font="Roboto-Regular"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <ImageView
+                    android:layout_weight="0.1"
+                    android:src="@drawable/avd_plus_to_chk"
+                    android:id="@+id/add"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent" />
+
+
+            </LinearLayout>
+
+
+            <View
+                android:layout_marginTop="5dp"
+                android:background="@color/colorAccent"
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"/>
+
+
+
+
+            <com.daniribalbert.customfontlib.views.CustomFontTextView
+                android:layout_width="match_parent"
+                android:layout_weight="0.8"
+                android:layout_height="0dp"
+                android:layout_margin="5dp"
+
+                app:font="Avenir-Medium"
+                android:gravity="left"
+                android:text="SELECTED BOXES"
+                android:textColor="@color/material_orange_700"
+                android:textSize="14sp" />
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/boxes_added"
+                android:background="@color/white"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:scrollbars="vertical"></android.support.v7.widget.RecyclerView>
+
+
+            <View
+                android:layout_marginTop="5dp"
+                android:background="@color/colorAccent"
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"/>
+            <include
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                layout="@layout/include_search_view" />
+
+
+            <com.daniribalbert.customfontlib.views.CustomFontTextView
+                android:layout_width="match_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="0.8"
+                android:layout_height="0dp"
+                app:font="Avenir-Medium"
+                android:gravity="left"
+                android:text="OR SELECT BOXES TO PUT FILE(S) IN"
+                android:textColor="@color/material_orange_700"
+                android:textSize="14sp" />
+
+   <android.support.v7.widget.RecyclerView
+                android:id="@+id/boxes"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"></android.support.v7.widget.RecyclerView>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+
+</LinearLayout>

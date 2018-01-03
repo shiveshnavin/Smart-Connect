@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.alexvasilkov.gestures.views.GestureFrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/backg"
+     app:gest_maxZoom="1.5"
+    app:gest_overscrollX="32dp"
+    android:fitsSystemWindows="false"
+    app:gest_overscrollY="32dp"
+    app:gest_restrictRotation="true"
+    app:gest_rotationEnabled="true" >
+
+    <!-- Using GestureFrameLayout as parent as an Easter egg -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:gravity="center"
+        android:weightSum="5"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/title_cont"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_weight="1.2"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="0dp"
+            >
+
+
+
+            <com.daniribalbert.customfontlib.views.CustomFontTextView
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:font="Avenir-Medium"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:text="@string/app_name"
+                android:textColor="@color/white"
+                android:id="@+id/title"
+                android:textSize="32sp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/logo" />
+
+            <ImageView
+
+
+                android:id="@+id/logo"
+                android:layout_width="115dp"
+                android:layout_height="115dp"
+                android:src="@drawable/avd_logo_sm" />
+
+
+            <ImageView
+                android:gravity="left"
+                android:layout_centerVertical="true"
+                android:layout_below="@+id/logo"
+                android:id="@+id/title_im"
+                android:layout_width="130dp"
+                android:alpha="0"
+                android:layout_height="50dp"
+                android:src="@drawable/logo_smt" />
+
+
+        </LinearLayout>
+
+        <RelativeLayout
+
+
+            android:id="@+id/pager_container"
+            android:layout_weight="3.95"
+            android:layout_height="0dp"
+            android:layout_width="match_parent">
+
+            <android.support.v4.view.ViewPager
+                android:overScrollMode="never"
+                android:id="@+id/help_pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </android.support.v4.view.ViewPager>
+
+            <me.relex.circleindicator.CircleIndicator
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="10dp"
+                 android:id="@+id/indicator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+</com.alexvasilkov.gestures.views.GestureFrameLayout>

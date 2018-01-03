@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/25.3.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="efb8cb62d47d157c29d1521daac7eefd4cb881ee">
+        <dex dex="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-25.3.1_ee38f8b68a9ea8c8e796ffa554d8c6a60275591c/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/exploded-aar/com.daniribalbert/custom-font-lib/0.9.8/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="bbb5335d216c0447a4c98f5eac2c8473345a6c35">
+        <dex dex="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.daniribalbert-custom-font-lib-0.9.8_ac27036ad7f0ea406aad1e136aee111cf5a2a5a9/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.3.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="150252b33b00274cc868578ade018fda0d43a3eb">
+        <dex dex="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-25.3.1_987d42e05f11add7412e5c30b7ae3f1ddeb9d8a1/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/exploded-aar/com.amitshekhar.android/android-networking/0.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="e580ed5da13f6d79688e4b91eb64977cf04428a4">
+        <dex dex="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.amitshekhar.android-android-networking-0.0.1_2357fd23ab578216a9123855bee755fb6bbbfc6d/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="40f15ba09db3de19a67ad63d086b7672736966e9">
+        <dex dex="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_0237841b0f50edb114c91081d8e5dc5563e38108/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/shivesh/.gradle/caches/modules-2/files-2.1/com.squareup.picasso/picasso/2.5.2/7446d06ec8d4f7ffcc53f1da37c95f200dcb9387/picasso-2.5.2.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="7446d06ec8d4f7ffcc53f1da37c95f200dcb9387">
+        <dex dex="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/picasso-2.5.2_8d43bd029deb3fdc3554fa27355abb49d0cbf4ed/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/shivesh/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.6.0/98476622f10715998eacf9240d6b479f12c66143/okio-1.6.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="98476622f10715998eacf9240d6b479f12c66143">
+        <dex dex="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/okio-1.6.0_8fb429b8a3c2897721e8b6f25c22427c05f529ea/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/exploded-aar/com.android.support/support-fragment/25.3.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="4a26a1154d053ab11aaf4c3967c42a4d66390991">
+        <dex dex="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-fragment-25.3.1_be2434d3c6a18653f41aef925a50d9053c4b4226/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/shivesh/.gradle/caches/modules-2/files-2.1/com.android.support/support-annotations/25.4.0/f6a2fc748ae3769633dea050563e1613e93c135e/support-annotations-25.4.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="f6a2fc748ae3769633dea050563e1613e93c135e">
+        <dex dex="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-25.4.0_3f5bf0c3735e23deffba16f224dc81810b844036/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/exploded-aar/me.relex/circleindicator/1.2.2/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="1db6784d006818fee2591f13b0bf09ac31a3d49a">
+        <dex dex="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/me.relex-circleindicator-1.2.2_33da62483e33e22e9ea25f8106b6acc7b76536a4/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/exploded-aar/com.alexvasilkov/gesture-views/2.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="5a3292c9447f15983fc4c98f2c57c00d9507dac7">
+        <dex dex="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.alexvasilkov-gesture-views-2.4.0_8a94b5e5db22eb8e22f30334017090c60157b91d/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/exploded-aar/com.android.support/support-v4/25.3.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-25.3.1_173c61903f36f96a01d8999e3fb50fc1318b8224/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/exploded-aar/jp.wasabeef/recyclerview-animators/2.2.7/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="a38dc57bd3a0900f291f38e4786cde461aece5a9">
+        <dex dex="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/jp.wasabeef-recyclerview-animators-2.2.7_dd825b5b0dbe9b295bf83ef9e4cb5519ce29a84e/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/25.3.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="6ef31f1555bb4cc513ec8d52711365a8b89f3600">
+        <dex dex="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-utils-25.3.1_38b38785528b4e6cd0bf14052e03eaeb39a611da/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/exploded-aar/com.android.support/transition/25.3.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="d4cf6227dd6a2ceff0f7dcf0c324380b7abf2c28">
+        <dex dex="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-transition-25.3.1_b8e840b5051c53bd8dd571a175ad8670703fd683/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="7341e3033bd5e30a14225eb8ca07b8939fd54bb8">
+        <dex dex="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_e8bf401eee581475f41fc284db35db59196f26dc/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/shivesh/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.4/695b63d702f505b9b916e02272e3b6381bade7f/gson-2.4.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="0695b63d702f505b9b916e02272e3b6381bade7f">
+        <dex dex="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/gson-2.4_f83e9ecccfac4522ccd044d85fb79683c7e04357/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/exploded-aar/com.android.support/support-compat/25.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="a64026daf4819a589aea776f5deb19b257a104d1">
+        <dex dex="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-compat-25.4.0_b3b3cdb70457b15a2fd2c961ad820d02b5d081cd/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/25.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="b1e0cd070d7cf659ece90e919bff76e7ddc32532">
+        <dex dex="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-recyclerview-v7-25.4.0_938fd4095bb21a9133a73a07fb7ae602d3939582/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.3.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="45f697922e6f072daa12f8a2995dc77ab03c11da">
+        <dex dex="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-media-compat-25.3.1_879c6492fb1b535358c9471f0f228fb9fb6b1a73/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/25.3.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="47635644d0d5c103c1dd8360549eb9ba3225c7d3">
+        <dex dex="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-25.3.1_4fb8049dc3c9ea20393cd3ffe26f9ae070d048eb/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/exploded-aar/com.android.support/design/25.3.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="38789e20ace9ab7dbd00554bd2673ab424478d3b">
+        <dex dex="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-design-25.3.1_d3af94c0bed269c0b38391d3f95aaaec982535c4/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/shivesh/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp3/okhttp/3.2.0/f7873a2ebde246a45c2a8d6f3247108b4c88a879/okhttp-3.2.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="f7873a2ebde246a45c2a8d6f3247108b4c88a879">
+        <dex dex="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/okhttp-3.2.0_9d0a20b872ac34222966b2990d7a6cf5d4d4ef23/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/25.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="c2deeac83ffa1304264bc755c2ddb84e7a7fa239">
+        <dex dex="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-ui-25.4.0_e2d288417a298fef5a75ad53749dcca7a760506d/classes.dex" />
+    </item>
+
+</items>

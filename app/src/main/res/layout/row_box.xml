@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
+    android:layout_height="wrap_content">
+
+
+    <LinearLayout
+
+        android:padding="7dp"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:weightSum="1.1"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_marginLeft="3dp"
+            android:background="@drawable/round_filled"
+            android:src="@drawable/avd_logo_sm"
+            android:layout_width="38dp"
+            android:layout_height="38dp" />
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:layout_gravity="center_vertical"
+            android:minWidth="40dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+
+            <com.daniribalbert.customfontlib.views.CustomFontTextView
+                android:layout_width="match_parent"
+                android:layout_weight="0.8"
+                android:layout_height="0dp"
+                app:font="Roboto-Regular"
+                android:gravity="left"
+                android:text="TEXT"
+                android:textColor="@color/grey_600"
+                android:id="@+id/name"
+                android:textSize="14sp" />
+
+
+            <LinearLayout
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.2"
+                android:weightSum="1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp">
+
+
+                <com.daniribalbert.customfontlib.views.CustomFontTextView
+                    android:layout_weight="0.3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:font="Roboto-Thin"
+                    android:gravity="left"
+                    android:text="WPA-PSK2"
+                    android:textColor="@color/secondary_text"
+                    android:id="@+id/btm_t0"
+                    android:textSize="12sp" />
+
+
+                <com.daniribalbert.customfontlib.views.CustomFontTextView
+                    android:layout_weight="0.3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:font="Roboto-Thin"
+                    android:gravity="center"
+                    android:text="-94 DB"
+                    android:textColor="@color/secondary_text"
+                    android:id="@+id/btm_t1"
+                    android:textSize="12sp" />
+
+
+                <com.daniribalbert.customfontlib.views.CustomFontTextView
+                    android:layout_weight="0.3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:font="Roboto-Thin"
+                    android:gravity="right"
+                    android:layout_gravity="right"
+                    android:text="NEW"
+                    android:textColor="@color/secondary_text"
+                    android:id="@+id/btm_t2"
+                    android:textSize="12sp" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:padding="2dp"
+            android:layout_weight="0.1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:src="@drawable/avd_del"
+                android:id="@+id/del"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+    <View
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:background="@color/grey_400"
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"/>
+
+</LinearLayout>

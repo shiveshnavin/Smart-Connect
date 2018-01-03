@@ -1,0 +1,11 @@
+<vector android:height="24dp" android:viewportHeight="32.0"
+    android:viewportWidth="32.0" android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:name="help_c">
+        <path
+            android:fillColor="@color/ic_fill"
+            android:pathData="M25.97,15C25.72,12.75 23.82,11 21.5,11C20.44,11 19.47,11.36 18.7,11.97C17.83,9.1 15.16,7 12,7C8.13,7 5,10.13 5,14C5,14.38 5.03,14.74 5.09,15.1C3.32,15.52 2,17.11 2,19C2,21.21 3.79,23 6,23L12,23L12,25L6,25C2.69,25 0,22.31 0,19C0,16.78 1.21,14.84 3,13.8C3.11,8.92 7.1,5 12,5C15.23,5 18.07,6.71 19.66,9.27C20.24,9.09 20.86,9 21.5,9C24.28,9 26.66,10.75 27.59,13.21C30.13,13.91 32,16.24 32,19C32,22.31 29.31,25 26,25L20,25L20,23L26,23C28.21,23 30,21.2 30,19C30,16.79 28.21,15 26,15ZM16,14L21,20L18,20L18,28L14,28L14,20L11,20ZM16,14"
+            android:strokeColor="@color/ic_fill"
+            android:strokeWidth="1" />
+    </group>
+
+</vector>

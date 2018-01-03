@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:drawable="@drawable/ic_my_logo"
+    tools:targetApi="lollipop">
+
+    <target
+        android:animation="@anim/anim_scale"
+        android:name="files" />
+
+
+    <target
+        android:animation="@anim/anim_scale2"
+        android:name="box_lock" />
+
+
+
+
+</animated-vector>
