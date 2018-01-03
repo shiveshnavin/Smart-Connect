@@ -10,7 +10,9 @@ import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.wifi.ScanResult;
+import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -54,6 +56,8 @@ public class HomeFragment extends Fragment implements Transact{
 
     Transact cb;
 
+    String AP_NAME="Ashivesh";
+    String AP_PASS="mahanraja";
 
     public HomeFragment()
     {}
@@ -72,7 +76,7 @@ public class HomeFragment extends Fragment implements Transact{
 
     }
 
-    private final BroadcastReceiver mWifiScanReceiver = new BroadcastReceiver() {
+     BroadcastReceiver mWifiScanReceiver =null;/*= new BroadcastReceiver() {
         @Override
         public void onReceive(Context c, Intent intent) {
             if (intent.getAction().equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
@@ -94,7 +98,7 @@ public class HomeFragment extends Fragment implements Transact{
 
 
 
-                if(utl.js.toJson(mScanResults).contains("MONG_TEST")&&!utl.isConnected())
+                if(utl.js.toJson(mScanResults).contains(AP_NAME)&&!utl.isConnected())
                 {
                     wifi2.setImageResource(R.drawable.ic_vector);
 
@@ -102,14 +106,14 @@ public class HomeFragment extends Fragment implements Transact{
                     text.setText("Connected to Device");
                     text.setTextColor(ctx.getResources().getColor(R.color.connected));
 
-                    connect("MONG_TEST","password");
+                    connect(AP_NAME,AP_PASS);
                    // utl.toast(ctx,"Connecting !!");
                 }
 
 
             }
         }
-    };
+    };*/
 
     public Context ctx;
     public Activity act;
@@ -138,7 +142,64 @@ public class HomeFragment extends Fragment implements Transact{
 
         mWifiManager = (WifiManager) act.getSystemService(WIFI_SERVICE);
         try {
-            act.unregisterReceiver(mWifiScanReceiver);
+            if(mWifiScanReceiver!=null)
+            {
+                act.unregisterReceiver(mWifiScanReceiver);
+            }
+            mWifiScanReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context c, Intent intent) {
+                    if (intent.getAction().equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
+                        List<ScanResult> mScanResults = mWifiManager.getScanResults();
+                        // add your logic here
+
+
+                        utl.l("WIFI_","Listing deviceds done .");
+                        setWifis(mScanResults);
+                        swipe.setRefreshing(false);
+
+                        utl.showDig(false,ctx);
+
+
+                        wifi2.setImageResource(R.drawable.ic_vector);
+
+
+
+                        getWaterFlowData();
+
+
+
+                        if(utl.js.toJson(mScanResults).contains(AP_NAME)&&!utl.isConnected())
+                        {
+
+                            utl.l("WIFI_","Connecting to device .");
+
+                            wifi2.setImageResource(R.drawable.ic_vector);
+
+
+                            text.setText("Connecting to Device...");
+                          ///  text.setTextColor(ctx.getResources().getColor(R.color.connected));
+
+                            connect(AP_NAME,AP_PASS);
+                            // utl.toast(ctx,"Connecting !!");
+                        }
+                        else{
+                            text.setText("Device Not found ! Make sure phone is in range and pull to refresh .");
+
+                        }
+
+
+                    }
+                    else if(intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)){
+
+                        utl.l("WIFI_","Connected to device DONE.");
+
+                        getWaterFlowData();;
+                    }
+                }
+            };
+
+
             act.registerReceiver(mWifiScanReceiver,
                     new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
             mWifiManager.startScan();
@@ -153,7 +214,27 @@ public class HomeFragment extends Fragment implements Transact{
 
 
 
-                getWaterFlowData();
+                WifiInfo wifiInfo;
+
+                wifiInfo = mWifiManager.getConnectionInfo();
+                if (wifiInfo.getSupplicantState() == SupplicantState.COMPLETED) {
+                    ssid =""+ wifiInfo.getSSID();
+                }
+
+                if(utl.isConnected()&&ssid.contains(AP_NAME))
+                {
+                    wifi2.setImageResource(R.drawable.ic_vector);
+
+
+                    getWaterFlowData();
+
+                }
+                else {
+
+                    mWifiManager.disconnect();
+
+                    mWifiManager.startScan();
+                }
             /*
 
                 utl.showDig(true,ctx);
@@ -187,7 +268,7 @@ public class HomeFragment extends Fragment implements Transact{
 
         if(ApManager.isApOn(ctx))
         {
-            ApManager.configApState(ctx);
+            ApManager.configApState(act);
 
             utl.l("AP Mode Toggle to : "+ApManager.isApOn(ctx));
 
@@ -213,7 +294,14 @@ public class HomeFragment extends Fragment implements Transact{
         }
         else {
 
-            if(utl.isConnected())
+            WifiInfo wifiInfo;
+
+            wifiInfo = mWifiManager.getConnectionInfo();
+            if (wifiInfo.getSupplicantState() == SupplicantState.COMPLETED) {
+                ssid =""+ wifiInfo.getSSID();
+            }
+
+            if(utl.isConnected()&&ssid.contains(AP_NAME))
             {
                 wifi2.setImageResource(R.drawable.ic_vector);
 
@@ -221,16 +309,22 @@ public class HomeFragment extends Fragment implements Transact{
                 getWaterFlowData();
 
             }
+            else {
+
+                mWifiManager.startScan();
+            }
         }
 
 
-        new Handler().postDelayed(r,2000);
+      //  new Handler().postDelayed(r,2000);
 
         return view;
     }
 
 
     TextView text;;
+    String ssid="";
+
 
 /*
 
@@ -294,6 +388,11 @@ public class HomeFragment extends Fragment implements Transact{
         }
     };
 
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     public void setWifis(List<ScanResult> mScanResults)
     {
@@ -385,6 +484,18 @@ public class HomeFragment extends Fragment implements Transact{
 
 
     BroadcastReceiver receiver = new WifiReciever() {
+
+        @Override
+        public void alreadyConnected()
+        {
+
+
+
+
+        }
+
+
+
         @Override
         public void onReceive(Context context, Intent intent) {
             WifiManager wifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
@@ -409,8 +520,9 @@ public class HomeFragment extends Fragment implements Transact{
 
         IntentFilter it=new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
 
-        try{
+       /* try{
 
+            if()
             act.unregisterReceiver(mWifiScanReceiver);
 
         }catch (Exception e)
@@ -418,23 +530,23 @@ public class HomeFragment extends Fragment implements Transact{
             e.printStackTrace();
         }
         act.registerReceiver(receiver, it);
-
+*/
         WifiConfiguration wifiConfig = new WifiConfiguration();
         wifiConfig.SSID = String.format("\"%s\"", ssid);
         wifiConfig.preSharedKey = String.format("\"%s\"", key);
 
-        WifiManager wifiManager = (WifiManager)act.getSystemService(WIFI_SERVICE);
+        //WifiManager mWifiManager = (WifiManager)act.getSystemService(WIFI_SERVICE);
 //remember id
-        int netId = wifiManager.addNetwork(wifiConfig);
-        wifiManager.disconnect();
-        wifiManager.enableNetwork(netId, true);
-        wifiManager.reconnect();
+        int netId = mWifiManager.addNetwork(wifiConfig);
+        mWifiManager.disconnect();
+        mWifiManager.enableNetwork(netId, true);
+        mWifiManager.reconnect();
 
 
-        wifi2.setImageResource(R.drawable.ic_vector);
+       // wifi2.setImageResource(R.drawable.ic_vector);
 
 
-        getWaterFlowData();
+       // getWaterFlowData();
 
 
     }

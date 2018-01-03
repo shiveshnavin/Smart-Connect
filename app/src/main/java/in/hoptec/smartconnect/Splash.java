@@ -2,14 +2,18 @@ package in.hoptec.smartconnect;
 
 import android.*;
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -147,10 +151,10 @@ public class Splash extends AppCompatActivity {
                     setUpIntro();
 
                 }
-                else  {
-                    Intent intent=new Intent(ctx, Home.class);
-                    startActivity(intent);
-                    finish();
+                else if(permissionOK) {
+
+
+                    launch();
 
 
                 }
@@ -324,8 +328,35 @@ public class Splash extends AppCompatActivity {
 
 
 
+    public int startedMSetPermmit=0;
+    public void writePermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.System.canWrite(getApplicationContext())) {
+
+                permissionOK=false;
+                startedMSetPermmit=1;
+
+                utl.diag(ctx, "Permission Required !", "Allow settings permission and mark it and then click back .", "GRANT", new utl.ClickCallBack() {
+                    @Override
+                    public void done(DialogInterface dialogInterface) {
+
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                            Intent intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
+                            intent.setData(Uri.parse("package:" + getPackageName()));
+                            startActivityForResult(intent, CODE_WRITE_SETTINGS_PERMISSION);
+                        }
+
+                    }
+                });
+
+
+            }
+        }
+    }
     public void setUpPermissions()
     {
+
+        writePermission();
 
         ActivityCompat.requestPermissions(act,
                 new String[]{
@@ -338,12 +369,26 @@ public class Splash extends AppCompatActivity {
                         Manifest.permission.ACCESS_COARSE_LOCATION,
                         Manifest.permission.CHANGE_NETWORK_STATE,
                         Manifest.permission.CHANGE_WIFI_STATE,
+                        Manifest.permission.WRITE_SETTINGS
                 },
                 1);
 
 
 
 
+    }
+
+    int CODE_WRITE_SETTINGS_PERMISSION=1210;
+    @SuppressLint("NewApi")
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CODE_WRITE_SETTINGS_PERMISSION && Settings.System.canWrite(this)){
+            Log.d("TAG", "CODE_WRITE_SETTINGS_PERMISSION success");
+            permissionOK=true;
+            launch();
+            //do your code
+        }
     }
 
     @Override
@@ -354,12 +399,20 @@ public class Splash extends AppCompatActivity {
 
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
-                        &&grantResults[2] == PackageManager.PERMISSION_GRANTED  && grantResults[0] == PackageManager.PERMISSION_GRANTED  && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                        &&grantResults[2] == PackageManager.PERMISSION_GRANTED
+
+                        && (grantResults[9] == PackageManager.PERMISSION_GRANTED||android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.M)
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED  && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
 
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
 
                     permissionOK=true;
+                    if(startedMSetPermmit==0)
+                    {
+                        launch();
+                    }
+
 
 
                 } else {
@@ -377,7 +430,30 @@ public class Splash extends AppCompatActivity {
     /*****************Firebase*****************/
 
 
+    boolean alreadyLaunched=false;
 
+    public void launch()
+    {
+
+        if (permissionOK&&!alreadyLaunched) {
+            alreadyLaunched=true;
+            Intent intent=new Intent(ctx, Home.class);
+            startActivity(intent);
+            finish();
+        }
+        else if(!alreadyLaunched) {
+            utl.diag(ctx, "Insufficient permissions !", "Please Restart App", "RESTART", new utl.ClickCallBack() {
+                @Override
+                public void done(DialogInterface dialogInterface) {
+                    Intent intent=new Intent(ctx, Splash.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+        }
+
+
+    }
 
     }
 

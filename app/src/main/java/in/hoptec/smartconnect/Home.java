@@ -23,7 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import in.hoptec.smartconnect.fragments.AddToBox;
-import in.hoptec.smartconnect.fragments.HomeFragment;
+import in.hoptec.smartconnect.fragments.HomeFragmentFixed;
 import in.hoptec.smartconnect.utils.GenricCallback;
 import in.hoptec.smartconnect.utils.Transact;
 
@@ -205,7 +205,7 @@ public class Home extends AppCompatActivity implements Transact {
                 pFragment= getSupportFragmentManager().findFragmentById(R.id.fragment);
 
 
-                curFragment =new HomeFragment();
+                curFragment =new HomeFragmentFixed();
 
                 transaction = getSupportFragmentManager().beginTransaction();
                 transaction.setCustomAnimations(R.anim.fr_fade_in, R.anim.fr_fade_out);

@@ -18,6 +18,8 @@ import android.graphics.drawable.Animatable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.ThumbnailUtils;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.CountDownTimer;
@@ -95,12 +97,16 @@ public class utl {
     public static void animate_avd(ImageView img)
     {
 
-        final Drawable drawable = img.getDrawable();
+        try {
+            final Drawable drawable = img.getDrawable();
 
-        if (drawable instanceof Animatable) {
-            ((Animatable) drawable).start();
+            if (drawable instanceof Animatable) {
+                ((Animatable) drawable).start();
+            }
+        } catch (Exception e) {
+
+            utl.e("ERROR WHILE ANIMATING IMAGEVIEW");
         }
-
 
 
     }
@@ -381,6 +387,19 @@ public class utl {
 
     }
 
+    public static boolean isWifiConnected(Activity act)
+    {
+        ConnectivityManager connManager = (ConnectivityManager) act.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+        if (mWifi.isConnected()) {
+
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
     public static boolean isConnected()
     {
         boolean isCon=false;

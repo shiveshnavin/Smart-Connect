@@ -13,6 +13,14 @@ import android.util.Log;
 
 public class WifiReciever extends BroadcastReceiver {
 
+    public void alreadyConnected()
+    {
+
+
+
+
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
         ConnectivityManager conMan = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
