@@ -5,6 +5,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
+import android.graphics.drawable.Animatable;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
@@ -19,6 +22,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,11 +78,24 @@ public class HomeFragment extends Fragment implements Transact{
 
                 utl.showDig(false,ctx);
 
+
+                wifi2.setImageResource(R.drawable.ic_vector);
+
+
+                text.setText("Connected to jarvis");
+                text.setTextColor(ctx.getResources().getColor(R.color.green_100));
+
+
                 if(utl.js.toJson(mScanResults).contains("jarvis")&&!utl.isConnected())
                 {
+                    wifi2.setImageResource(R.drawable.ic_vector);
+
+
+                    text.setText("Connected to jarvis");
+                    text.setTextColor(ctx.getResources().getColor(R.color.green_100));
 
                     connect("jarvis","goforit@delhi");
-                    utl.toast(ctx,"Connecting !!");
+                   // utl.toast(ctx,"Connecting !!");
                 }
 
 
@@ -88,6 +106,7 @@ public class HomeFragment extends Fragment implements Transact{
     public Context ctx;
     public Activity act;
 
+    ImageView wifi2;
     SwipeRefreshLayout swipe;
 
     WifiManager mWifiManager;
@@ -104,11 +123,19 @@ public class HomeFragment extends Fragment implements Transact{
         recyclerView =(RecyclerView)view.findViewById(R.id.boxes);
         swipe=(SwipeRefreshLayout)view.findViewById(R.id.swipe);
 
+        text=(TextView) view.findViewById(R.id.text);
+
+
+        wifi2=(ImageView) view.findViewById(R.id.wifi);
 
         mWifiManager = (WifiManager) act.getSystemService(WIFI_SERVICE);
-        act.registerReceiver(mWifiScanReceiver,
-                new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
-        mWifiManager.startScan();
+        try {
+            act.unregisterReceiver(mWifiScanReceiver); } catch (Exception e) {
+            e.printStackTrace();
+        }
+            act.registerReceiver(mWifiScanReceiver,
+                    new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+            mWifiManager.startScan();
 
 
 
@@ -126,9 +153,24 @@ public class HomeFragment extends Fragment implements Transact{
             }
         });
 
-        utl.showDig(true,ctx);
+       // utl.showDig(true,ctx);
 
 
+        try {
+
+            wifi2.setImageResource(R.drawable.avd_conn);
+            final Drawable drawable = wifi2.getDrawable();
+
+            if (drawable instanceof Animatable) {
+                ((Animatable) drawable).start();
+            }
+
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         if(ApManager.isApOn(ctx))
         {
@@ -150,6 +192,21 @@ public class HomeFragment extends Fragment implements Transact{
             utl.l("STA Mode Toggle to : ON" );
 
 
+      /*      act.registerReceiver(this.WifiStateChangedReceiver,
+                    new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
+*/
+
+
+        }
+        else {
+
+            if(utl.isConnected())
+            {
+                wifi2.setImageResource(R.drawable.ic_vector);
+
+                text.setText("Connected to jarvis");
+                text.setTextColor(Color.parseColor("#2baf2b"));
+            }
         }
 
 
@@ -157,6 +214,43 @@ public class HomeFragment extends Fragment implements Transact{
 
         return view;
     }
+
+
+    TextView text;;
+
+
+    private BroadcastReceiver WifiStateChangedReceiver
+            = new BroadcastReceiver(){
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // TODO Auto-generated method stub
+
+            int extraWifiState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE ,
+                    WifiManager.WIFI_STATE_UNKNOWN);
+
+            switch(extraWifiState){
+                case WifiManager.WIFI_STATE_DISABLED:
+                    utl.l("WIFI STATE DISABLED");
+                    break;
+                case WifiManager.WIFI_STATE_DISABLING:
+                    utl.l("WIFI STATE DISABLING");
+                    break;
+                case WifiManager.WIFI_STATE_ENABLED:
+                    mWifiManager.startScan();
+
+                    utl.l("WIFI STATE ENABLED");
+                    break;
+                case WifiManager.WIFI_STATE_ENABLING:
+                    utl.l("WIFI STATE ENABLING");
+                    break;
+                case WifiManager.WIFI_STATE_UNKNOWN:
+                    utl.l("WIFI STATE UNKNOWN");
+                    break;
+            }
+
+        }};
+
 
 
      WifiManager wifi;
@@ -283,7 +377,8 @@ public class HomeFragment extends Fragment implements Transact{
 
 
                 if(utl.isConnected())
-                  utl.diag(act,"CONNECTED !","Connected to \"jarvis\" .");
+                //  utl.diag(act,"CONNECTED !","Connected to \"jarvis\" .");
+                    wifi2.setImageResource(R.drawable.ic_vector);
             } else {
 
 
@@ -318,6 +413,13 @@ public class HomeFragment extends Fragment implements Transact{
         wifiManager.disconnect();
         wifiManager.enableNetwork(netId, true);
         wifiManager.reconnect();
+
+
+        wifi2.setImageResource(R.drawable.ic_vector);
+
+
+        text.setText("Connected to jarvis");
+        text.setTextColor(ctx.getResources().getColor(R.color.green_100));
 
 
 

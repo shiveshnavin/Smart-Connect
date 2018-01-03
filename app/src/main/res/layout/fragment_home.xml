@@ -11,8 +11,28 @@
     android:background="#fff"
     tools:context="in.hoptec.smartconnect.fragments.HomeFragment">
 
+    <ImageView
+
+
+        android:id="@+id/wifi"
+        android:layout_centerInParent="true"
+        android:layout_width="100dp"
+        android:layout_height="100dp" />
+
+    <com.daniribalbert.customfontlib.views.CustomFontTextView
+        android:layout_width="match_parent"
+        android:layout_below="@+id/wifi"
+        android:textSize="23sp"
+        android:textColor="@color/grey_600"
+        android:id="@+id/text"
+        android:gravity="center"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:font="Avenir-Medium"
+        android:text="Connecting..."
+        android:layout_height="wrap_content" />
 
     <android.support.v4.widget.SwipeRefreshLayout
+        android:visibility="gone"
         android:id="@+id/swipe"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
