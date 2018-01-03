@@ -144,7 +144,7 @@ public class HomeFragment extends Fragment implements Transact{
         if(wifi.getWifiState()==WifiManager.WIFI_STATE_DISABLED||!wifi.isWifiEnabled())
         {
 
-         //   wifi.setWifiEnabled(false);//Turn off Wifi
+            // wifi.setWifiEnabled(false);//Turn off Wifi
 
             wifi.setWifiEnabled(true);//Turn on Wifi
             utl.l("STA Mode Toggle to : ON" );
@@ -171,6 +171,9 @@ public class HomeFragment extends Fragment implements Transact{
 
             else
             {
+                wifi.setWifiEnabled(true);//Turn on Wifi
+                utl.l("STA Mode Toggle to : ON" );
+
                 new Handler().postDelayed(r, 2000);
 
             }
