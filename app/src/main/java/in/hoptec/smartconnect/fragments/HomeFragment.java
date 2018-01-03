@@ -139,7 +139,6 @@ public class HomeFragment extends Fragment implements Transact{
         }
 
 
-        final WifiManager wifi;
         wifi=(WifiManager)act.getSystemService(Context.WIFI_SERVICE);
 
         if(wifi.getWifiState()==WifiManager.WIFI_STATE_DISABLED||!wifi.isWifiEnabled())
@@ -152,23 +151,35 @@ public class HomeFragment extends Fragment implements Transact{
 
 
         }
-        final Runnable r=new Runnable() {
-            @Override
-            public void run() {
-
-                if(wifi.isWifiEnabled())
-                  mWifiManager.startScan();
 
 
-
-
-
-            }
-        };
         new Handler().postDelayed(r,2000);
 
         return view;
     }
+
+
+     WifiManager wifi;
+
+
+    final Runnable r=new Runnable() {
+        @Override
+        public void run() {
+
+            if(wifi.isWifiEnabled())
+                mWifiManager.startScan();
+
+            else
+            {
+                new Handler().postDelayed(r, 2000);
+
+            }
+
+
+
+
+        }
+    };
 
 
     public void setWifis(List<ScanResult> mScanResults)
