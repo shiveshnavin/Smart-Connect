@@ -55,7 +55,7 @@ public class Splash extends AppCompatActivity {
        final Drawable drawable = mIcDownloadAnimator.getDrawable();
 
         if (drawable instanceof Animatable) {
-            ((Animatable) drawable).start();
+            //((Animatable) drawable).start();
         }
 
         final TextView textView = (TextView) findViewById(R.id.title);
@@ -94,6 +94,15 @@ public class Splash extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animation animation) {
                 //  mIcDownloadAnimator2.startAnimation(myAnim2);
+
+
+                ImageView mIcDownloadAnimator = (ImageView) findViewById(R.id.logo);
+                final Drawable drawable = mIcDownloadAnimator.getDrawable();
+
+                if (drawable instanceof Animatable) {
+                    ((Animatable) drawable).start();
+                }
+
                mIcDownloadAnimator2.animate().alpha(1f);
 
             }
@@ -114,7 +123,7 @@ public class Splash extends AppCompatActivity {
             @Override
             public void run() {
 
-                if(utl.getKey("firstinstall",ctx)==null || true)
+                if(utl.getKey("firstinstall",ctx)==null)
                 {
 
                     if (drawable instanceof Animatable) {

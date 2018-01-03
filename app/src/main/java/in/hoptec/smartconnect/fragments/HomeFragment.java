@@ -26,6 +26,7 @@ import java.util.List;
 import in.hoptec.smartconnect.R;
 import in.hoptec.smartconnect.adapters.BoxesAdapter;
 import in.hoptec.smartconnect.database.BoxMeta;
+import in.hoptec.smartconnect.utils.ApManager;
 import in.hoptec.smartconnect.utils.Transact;
 import in.hoptec.smartconnect.utils.WifiReciever;
 import in.hoptec.smartconnect.utl;
@@ -129,7 +130,42 @@ public class HomeFragment extends Fragment implements Transact{
 
 
 
-        mWifiManager.startScan();
+        if(ApManager.isApOn(ctx))
+        {
+            ApManager.configApState(ctx);
+
+            utl.l("AP Mode Toggle to : "+ApManager.isApOn(ctx));
+
+        }
+
+
+        final WifiManager wifi;
+        wifi=(WifiManager)act.getSystemService(Context.WIFI_SERVICE);
+
+        if(wifi.getWifiState()==WifiManager.WIFI_STATE_DISABLED||!wifi.isWifiEnabled())
+        {
+
+         //   wifi.setWifiEnabled(false);//Turn off Wifi
+
+            wifi.setWifiEnabled(true);//Turn on Wifi
+            utl.l("STA Mode Toggle to : ON" );
+
+
+        }
+        final Runnable r=new Runnable() {
+            @Override
+            public void run() {
+
+                if(wifi.isWifiEnabled())
+                  mWifiManager.startScan();
+
+
+
+
+
+            }
+        };
+        new Handler().postDelayed(r,2000);
 
         return view;
     }
@@ -247,6 +283,15 @@ public class HomeFragment extends Fragment implements Transact{
     {
 
         IntentFilter it=new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+
+        try{
+
+            act.unregisterReceiver(mWifiScanReceiver);
+
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         act.registerReceiver(receiver, it);
 
         WifiConfiguration wifiConfig = new WifiConfiguration();
