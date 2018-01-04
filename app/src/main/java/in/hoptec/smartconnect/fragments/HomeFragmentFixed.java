@@ -133,20 +133,24 @@ public class HomeFragmentFixed extends Fragment implements Transact{
 
         }
         else {
-            if(mWifiManager.getWifiState()==WifiManager.WIFI_STATE_DISABLED||!mWifiManager.isWifiEnabled())
-            {
+
 
                 registerRecievers();
-
+          /*  if(mWifiManager.getWifiState()==WifiManager.WIFI_STATE_DISABLED||!mWifiManager.isWifiEnabled())
+            {
                 mWifiManager.setWifiEnabled(true);
                 utl.l("WIFI_","STA Mode Toggle to : ON" );
 
-            }
+            }*/
         }
 
 
 
     }
+
+
+    boolean loadedData=false;
+
 
     public void isWifiConnectedAlready()
     {
@@ -192,6 +196,11 @@ public class HomeFragmentFixed extends Fragment implements Transact{
                 if (intent.getAction().equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
                     List<ScanResult> mScanResults = mWifiManager.getScanResults();
 
+
+                    if(loadedData)
+                    {
+                        return;
+                    }
                     utl.l("WIFI_","Listing deviceds done .");
                     swipe.setRefreshing(false);
                     if(utl.js.toJson(mScanResults).contains(AP_NAME)&&!utl.isConnected())
@@ -221,6 +230,10 @@ public class HomeFragmentFixed extends Fragment implements Transact{
             public void onReceive(Context context, Intent intent) {
 
 
+                if(loadedData)
+                {
+                    loadedData=false;
+                }
 
                 if(utl.isWifiConnected(act))
                 {
@@ -230,12 +243,16 @@ public class HomeFragmentFixed extends Fragment implements Transact{
 
                 }
 
+
+
                 int extraWifiState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE ,
                         WifiManager.WIFI_STATE_UNKNOWN);
 
                 switch(extraWifiState){
                     case WifiManager.WIFI_STATE_DISABLED:
-                        utl.l("WIFI_","WIFI STATE DISABLED");
+                        utl.l("WIFI_","WIFI STATE DISABLED .. Enabling...");
+                        mWifiManager.setWifiEnabled(true);
+
                         break;
                     case WifiManager.WIFI_STATE_DISABLING:
                         utl.l("WIFI_","WIFI STATE DISABLING");
@@ -282,12 +299,34 @@ public class HomeFragmentFixed extends Fragment implements Transact{
             }
         };
 
+        unrgisterRecievers();
 
         act.registerReceiver(mWifiStateChangedReceiver,new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
 
         act.registerReceiver(mWifiScanReceiver,new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
 
         act.registerReceiver(mConnectedReciever,new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+
+
+    }
+
+    public void unrgisterRecievers()
+    {
+        try {
+            act.unregisterReceiver(mWifiStateChangedReceiver);
+        } catch (Exception e) {
+         }
+
+        try {
+            act.unregisterReceiver(mWifiScanReceiver);
+        } catch (Exception e) {
+         }
+
+        try {
+            act.unregisterReceiver(mConnectedReciever);
+        } catch (Exception e) {
+
+        }
 
 
     }
@@ -337,6 +376,10 @@ public class HomeFragmentFixed extends Fragment implements Transact{
             @Override
             public void onResponse(JSONObject response) {
 
+                unrgisterRecievers();
+                loadedData=true;
+                swipe.setRefreshing(false);
+
                 if(response.toString().toLowerCase().contains("success"))
                 {
                     try {
@@ -381,6 +424,8 @@ public class HomeFragmentFixed extends Fragment implements Transact{
 
 
     }
+
+
 
 
 }

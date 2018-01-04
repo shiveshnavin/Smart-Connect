@@ -97,7 +97,7 @@ public class Home extends AppCompatActivity implements Transact {
 
 
 
-        transactToState(States.HOME);
+       // transactToState(States.HOME);
 
         initNavigationDrawer();
 
