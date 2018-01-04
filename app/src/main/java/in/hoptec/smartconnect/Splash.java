@@ -356,7 +356,7 @@ public class Splash extends AppCompatActivity {
     public void setUpPermissions()
     {
 
-        writePermission();
+      //  writePermission();
 
         ActivityCompat.requestPermissions(act,
                 new String[]{
@@ -401,18 +401,19 @@ public class Splash extends AppCompatActivity {
                 if (grantResults.length > 0
                         &&grantResults[2] == PackageManager.PERMISSION_GRANTED
 
-                        && (grantResults[9] == PackageManager.PERMISSION_GRANTED||android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.M)
+            /*            && (grantResults[9] == PackageManager.PERMISSION_GRANTED||
+                        android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.M)*/
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED  && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
 
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
 
                     permissionOK=true;
-                    if(startedMSetPermmit==0)
+                   /* if(startedMSetPermmit==0)
                     {
                         launch();
                     }
-
+*/
 
 
                 } else {

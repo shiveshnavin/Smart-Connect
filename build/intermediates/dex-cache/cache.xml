@@ -39,21 +39,21 @@
     </item>
     <item
         is-multidex="true"
+        jar="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="2a64a48cd9782dc4799d083bfea1ba920f1d91ed">
+        <dex dex="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_0237841b0f50edb114c91081d8e5dc5563e38108/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
         jar="/home/shivesh/.gradle/caches/modules-2/files-2.1/com.squareup.picasso/picasso/2.5.2/7446d06ec8d4f7ffcc53f1da37c95f200dcb9387/picasso-2.5.2.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
         sha1="7446d06ec8d4f7ffcc53f1da37c95f200dcb9387">
         <dex dex="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/picasso-2.5.2_8d43bd029deb3fdc3554fa27355abb49d0cbf4ed/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="e7b3cfafe239fcd0099702bfef1c2580cd9b180e">
-        <dex dex="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_0237841b0f50edb114c91081d8e5dc5563e38108/classes.dex" />
     </item>
     <item
         is-multidex="true"

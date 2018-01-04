@@ -3,6 +3,7 @@ package in.hoptec.smartconnect.fragments;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.Animatable;
@@ -121,8 +122,15 @@ public class HomeFragmentFixed extends Fragment implements Transact{
 
         if(ApManager.isApOn(ctx))
         {
-            ApManager.configApState(act);
-            utl.l("WIFI_","AP Mode Toggle to : "+ApManager.isApOn(ctx));
+            utl.diag(ctx, "Hotspot On !", "Please turn OFF the WiFi hotspot and click OK to continue !", "TURNED OFF", new utl.ClickCallBack() {
+                @Override
+                public void done(DialogInterface dialogInterface) {
+                    m_start();
+                }
+            });
+            //ApManager.configApState(act);
+           // utl.l("WIFI_","AP Mode Toggle to : "+ApManager.isApOn(ctx));
+            return;
 
         }
 
@@ -213,6 +221,7 @@ public class HomeFragmentFixed extends Fragment implements Transact{
 
                         text.setText("Device Not found ! Make sure phone is in range and pull to refresh .");
 
+                        unrgisterRecievers();
                     }
 
                 }
@@ -310,6 +319,16 @@ public class HomeFragmentFixed extends Fragment implements Transact{
 
     }
 
+    @Override
+    public void onDestroyView() {
+        unrgisterRecievers();
+
+        super.onDestroyView();
+
+
+
+    }
+
     public void unrgisterRecievers()
     {
         try {
@@ -357,6 +376,7 @@ public class HomeFragmentFixed extends Fragment implements Transact{
 
     public void getWaterFlowData()
     {
+        unrgisterRecievers();
 
         text.setText("Connected to Device");
         wifi2.setImageResource(R.drawable.avd_coc);
@@ -376,7 +396,6 @@ public class HomeFragmentFixed extends Fragment implements Transact{
             @Override
             public void onResponse(JSONObject response) {
 
-                unrgisterRecievers();
                 loadedData=true;
                 swipe.setRefreshing(false);
 
