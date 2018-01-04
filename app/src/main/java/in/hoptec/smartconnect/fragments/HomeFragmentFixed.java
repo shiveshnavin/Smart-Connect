@@ -56,8 +56,8 @@ public class HomeFragmentFixed extends Fragment implements Transact{
 
     Transact cb;
 
-    String AP_NAME="Ashivesh";
-    String AP_PASS="mahanraja";
+    String AP_NAME="MONG_TEST";
+    String AP_PASS="password";
 
     public HomeFragmentFixed()
     {}
@@ -172,7 +172,7 @@ public class HomeFragmentFixed extends Fragment implements Transact{
             utl.l("WIFI_","Connected another AP ALREADY DIsconnecting....");
 
 
-            mWifiManager.disconnect();
+                mWifiManager.disconnect();
                 connect(AP_NAME,AP_PASS);
 
             }
@@ -298,10 +298,6 @@ public class HomeFragmentFixed extends Fragment implements Transact{
 
     public void connect(String ssid,String key)
     {
-
-
-
-
 
 
         IntentFilter it=new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
