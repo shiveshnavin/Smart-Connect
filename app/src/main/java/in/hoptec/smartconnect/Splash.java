@@ -127,7 +127,7 @@ public class Splash extends AppCompatActivity {
             @Override
             public void run() {
 
-                if(utl.getKey("firstinstall",ctx)==null)
+                if(utl.getKey("firstinstall",ctx)==null||true)
                 {
 
                     if (drawable instanceof Animatable) {

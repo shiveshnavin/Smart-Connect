@@ -58,9 +58,10 @@ public class HomeFragmentFixed extends Fragment implements Transact{
     Transact cb;
 
 
-    String  MONG_HOST_IP = "http://192.168.1.1";
+    String  MONG_HOST_IP = "http://192.168.4.1";
     String AP_NAME="MONG_TEST";
     String AP_PASS="password";
+    String API_KEY="AEZAKMI";
 
     public HomeFragmentFixed()
     {
@@ -109,7 +110,6 @@ public class HomeFragmentFixed extends Fragment implements Transact{
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
 
                 m_start();
 
@@ -278,6 +278,9 @@ public class HomeFragmentFixed extends Fragment implements Transact{
                     {
                         connect(AP_NAME,AP_PASS);
                     }
+                    else {
+                        text.setText("Device Not in Range ! \nPlease Make Sure Device is turned on and is in Range and Pull Down to refresh .");
+                    }
 
 
                 }
@@ -424,7 +427,7 @@ public class HomeFragmentFixed extends Fragment implements Transact{
         utl.l("WIFI_",url);
         JSONObject jo=new JSONObject();
         try {
-            jo.put("api_key","AEZAKMIdbf");
+            jo.put("api_key",API_KEY);
             jo.put("sensor_id",10);
 
 
@@ -442,10 +445,13 @@ public class HomeFragmentFixed extends Fragment implements Transact{
                 if(response.toString().toLowerCase().contains("success"))
                 {
                     try {
-                        String re="::\n"+"Sensor 10 Val : "+response.getString("sensor_10")+
+                        String re="_____\n"+
                                 "\n"+"Free RAM : "+response.getString("free_ram")+
                                 "\n"+"Uptime : "+response.getString("uptime")+
-                                "\n"+"Status : "+response.getString("status");
+                                "\n"+"Status : "+response.getString("status")+
+                        "\nSensor Data : "+response.getString("sensor_10")
+
+                        ;
 
 
                         text.setText("Device Connected\nSensor API Response\n" + re);
