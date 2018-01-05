@@ -10,7 +10,7 @@
     android:paddingRight="@dimen/home_v_margin"
     android:paddingTop="@dimen/home_v_margin"
     android:background="#fff"
-    tools:context="in.hoptec.smartconnect.fragments.HomeFragment"
+
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
         <LinearLayout

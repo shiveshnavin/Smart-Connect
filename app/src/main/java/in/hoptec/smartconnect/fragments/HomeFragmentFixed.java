@@ -57,8 +57,8 @@ public class HomeFragmentFixed extends Fragment implements Transact{
 
     Transact cb;
 
-    String AP_NAME="Ashivesh";
-    String AP_PASS="mahanraja";
+    String AP_NAME="MONG_TEST";
+    String AP_PASS="password";
 
     public HomeFragmentFixed()
     {}
@@ -116,6 +116,8 @@ public class HomeFragmentFixed extends Fragment implements Transact{
     public void m_start()
     {
 
+
+        initRecievers();
         wifi2.setImageResource(R.drawable.avd_conn);
         utl.animate_avd(wifi2);
 
@@ -143,79 +145,103 @@ public class HomeFragmentFixed extends Fragment implements Transact{
         else {
 
 
-             registerRecievers();
-          /*  if(mWifiManager.getWifiState()==WifiManager.WIFI_STATE_DISABLED||!mWifiManager.isWifiEnabled())
+            mWifiManager.setWifiEnabled(true);
+            registerRecievers(I_SCAN_REC);
+            setTimer();
+          /* if(mWifiManager.getWifiState()==WifiManager.WIFI_STATE_DISABLED||!mWifiManager.isWifiEnabled())
             {
                 mWifiManager.setWifiEnabled(true);
                 utl.l("WIFI_","STA Mode Toggle to : ON" );
 
-            }*/
+            } */
         }
 
 
 
     }
 
-    public static boolean isWifiScanOn=false;
+    Handler h;Runnable r;
 
-    public static class WifiRec extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            int extraWifiState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE ,
-                    WifiManager.WIFI_STATE_UNKNOWN);
-
-            switch(extraWifiState){
-                case WifiManager.WIFI_STATE_DISABLED:
-                    utl.l("WIFI_","WIFI STATE DISABLED .. Enabling...");
-                  //  mWifiManager.setWifiEnabled(true);
-
-                    break;
-                case WifiManager.WIFI_STATE_DISABLING:
-                    utl.l("WIFI_","WIFI STATE DISABLING");
-                    break;
-                case WifiManager.WIFI_STATE_ENABLED:
-
-                  //  text.setText("Searching for device...");
+    public void setTimer()
+    {
 
 
-                    if(!isWifiScanOn)
-                     mWifiManager.startScan();
+        h=new Handler();
+        r=new Runnable() {
+            @Override
+            public void run() {
+
+                utl.l("WIFI_","CKECK AGAIN and SCAN STATE IS "+CUR_SCAN_STATE);
+
+                if(mWifiManager.getWifiState()==WifiManager.WIFI_STATE_DISABLED){
+                    mWifiManager.setWifiEnabled(true);
+                } else if (mWifiManager.getWifiState() == WifiManager.WIFI_STATE_ENABLED) {
 
 
-                    utl.l("WIFI_","WIFI STATE ENABLED");
-                    break;
-                case WifiManager.WIFI_STATE_ENABLING:
-                    utl.l("WIFI_","WIFI STATE ENABLING");
-                    break;
-                case WifiManager.WIFI_STATE_UNKNOWN:
-                    utl.l("WIFI_","WIFI STATE UNKNOWN");
-                    break;
+
+                if(CUR_SCAN_STATE.equals(COMPLETED))
+                {
+
+                    CUR_SCAN_STATE=RUNNING;
+                    mWifiManager.startScan();
+                }
+
+                if(utl.isWifiConnected(act)) {
+
+                    if(!getSSID().equals(AP_NAME))
+                    {
+                        mWifiManager.disconnect();
+                    }
+
+
             }
 
+                }
+                if(!CUR_CONN_STATE.equals(CONNECTED))
+                {
+                    connect(AP_NAME,AP_PASS);
+                    h.postDelayed(r, 2000);
+
+                }
 
 
-            ConnectivityManager conMan = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo netInfo = conMan.getActiveNetworkInfo();
+        }
+        };
+        h.postDelayed(r,2000);
 
 
-            if (netInfo != null && netInfo.getType() == ConnectivityManager.TYPE_WIFI)
-                Log.d("WifiReceiver", "Have Wifi Connection");
-            else
-                Log.d("WifiReceiver", "Don't have Wifi Connection");
+    }
+
+
+
+    public static boolean isWifiScanOn=false;
+    boolean loadedData=false;
+
+
+
+    public String  getSSID()
+    {
+
+
+
+        WifiInfo wifiInfo;
+
+
+        wifiInfo = mWifiManager.getConnectionInfo();
+        if (wifiInfo.getSupplicantState() == SupplicantState.COMPLETED) {
+            ssid =""+ wifiInfo.getSSID();
         }
 
 
-    };
 
-
-    boolean loadedData=false;
-
+        return
+                ssid;
+    }
 
     public void isWifiConnectedAlready()
     {
 
-            WifiInfo wifiInfo;
+        WifiInfo wifiInfo;
 
         utl.l("WIFI_","Connected to WIFI .");
 
@@ -228,16 +254,17 @@ public class HomeFragmentFixed extends Fragment implements Transact{
 
         if(ssid.contains(AP_NAME))
             {
-                utl.l("WIFI_","Connected to device ALREADY.");
-
-                getWaterFlowData();;
+                 utl.l("WIFI_","Connected to device ALREADY.");
+                getWaterFlowData();
             }
-            else {
+            else if(!CUR_CONN_STATE.equals(CONNECTING)&&!CUR_CONN_STATE.equals(CONNECTED)){
             utl.l("WIFI_","Connected another AP ALREADY DIsconnecting....And connectingg to "+AP_NAME);
 
 
+                CUR_CONN_STATE=CONNECTING;
                 mWifiManager.disconnect();
-                connect(AP_NAME,AP_PASS);
+            registerRecievers(I_I_WIFI_CONN_REC);
+
 
             }
 
@@ -247,7 +274,10 @@ public class HomeFragmentFixed extends Fragment implements Transact{
     }
 
 
-    public void registerRecievers()
+    public final int I_SCAN_REC=12,I_WIFI_STATE_REC=232,I_I_WIFI_CONN_REC=3432;
+    String CUR_SCAN_STATE="NOT RUNNING",RUNNING="RUNNING",COMPLETED="COMPLETED";
+    String NOT_CONNECTED="NOT CONNECTED",CUR_CONN_STATE=NOT_CONNECTED,CONNECTING="CONNECTING",CONNECTED="CONNECTED";
+    public void initRecievers()
     {
 
 
@@ -258,13 +288,15 @@ public class HomeFragmentFixed extends Fragment implements Transact{
                     List<ScanResult> mScanResults = mWifiManager.getScanResults();
 
 
-                    isWifiScanOn=false;
+                    CUR_SCAN_STATE=COMPLETED;
+                    utl.l("WIFI_","WIFI STATE SCANNING STATE IS "+CUR_SCAN_STATE);
+
 
                     String ssids="";
                     for (ScanResult scanResults:mScanResults
                          ) {
 
-                        utl.l("WIFI_ RR : "+scanResults.SSID);
+                       // utl.l("WIFI_ RR : "+scanResults.SSID);
 
                         ssids+="\n"+scanResults.SSID;
 
@@ -277,11 +309,12 @@ public class HomeFragmentFixed extends Fragment implements Transact{
                     utl.l("WIFI_","Listing deviceds done .");
                     swipe.setRefreshing(false);
 
-                    utl.e(ssids);
+                    utl.e("WIFI_",ssids);
 
                     if(ssids.contains(AP_NAME))
                     {
 
+                        CUR_CONN_STATE=CONNECTING;
                         utl.l("WIFI_","Connecting to device .");
                         text.setText("Connecting to Device...");
                         connect(AP_NAME,AP_PASS);
@@ -291,6 +324,7 @@ public class HomeFragmentFixed extends Fragment implements Transact{
 
                         text.setText("Device Not found ! Make sure phone is in range and pull to refresh .");
 
+                        CUR_SCAN_STATE="DISABLED";
                         unrgisterRecievers();
                     }
                     else{
@@ -341,12 +375,21 @@ public class HomeFragmentFixed extends Fragment implements Transact{
                         break;
                     case WifiManager.WIFI_STATE_ENABLED:
 
-                             text.setText("Searching for device...");
-                             mWifiManager.startScan();
+                        isWifiConnectedAlready();
+
+                        if (CUR_SCAN_STATE.equals(COMPLETED)) {
 
 
-                        utl.l("WIFI_","WIFI STATE ENABLED");
-                        break;
+
+                            CUR_SCAN_STATE=RUNNING;
+                            text.setText("Searching for device...");
+                            mWifiManager.startScan();
+                        }
+
+                        utl.l("WIFI_","WIFI STATE ENABLED and SCANNING STATE IS "+CUR_SCAN_STATE);
+
+
+                       break;
                     case WifiManager.WIFI_STATE_ENABLING:
                         utl.l("WIFI_","WIFI STATE ENABLING");
                         break;
@@ -375,8 +418,14 @@ public class HomeFragmentFixed extends Fragment implements Transact{
 
                     Log.d("WIFI_", "Have Wifi Connection");
                 }
-                else
+                else{
                     Log.d("WIFI_", "Don't have Wifi Connection");
+
+                    if(mWifiManager.getWifiState()==WifiManager.WIFI_STATE_ENABLED)
+                       connect(AP_NAME,AP_PASS);
+
+
+                }
 
 
             }
@@ -384,11 +433,32 @@ public class HomeFragmentFixed extends Fragment implements Transact{
 
         unrgisterRecievers();
 
-        act.registerReceiver(mWifiStateChangedReceiver,new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
 
-        act.registerReceiver(mWifiScanReceiver,new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+    }
 
-       // act.registerReceiver(mConnectedReciever,new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+    public void registerRecievers(int n)
+    {
+
+        if (n==0) {
+            // act.registerReceiver(mWifiStateChangedReceiver,new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
+
+            act.registerReceiver(mWifiScanReceiver,new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+
+            act.registerReceiver(mConnectedReciever,new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        } else if(n==I_WIFI_STATE_REC) {
+           act.registerReceiver(mWifiStateChangedReceiver,new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
+
+
+        }else if(n==I_SCAN_REC) {
+            act.registerReceiver(mWifiScanReceiver,new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+
+
+        }
+        else if(n==I_I_WIFI_CONN_REC) {
+            act.registerReceiver(mConnectedReciever,new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+
+
+        }
 
 
     }
@@ -444,7 +514,7 @@ public class HomeFragmentFixed extends Fragment implements Transact{
         mWifiManager.disconnect();
         mWifiManager.enableNetwork(netId, true);
         mWifiManager.reconnect();
-        m_start();
+       // m_start();
 
     }
 
@@ -452,6 +522,9 @@ public class HomeFragmentFixed extends Fragment implements Transact{
     public void getWaterFlowData()
     {
         unrgisterRecievers();
+
+
+        CUR_CONN_STATE=CONNECTED;
 
 
         text.setText("Connected to Device");
