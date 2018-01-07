@@ -59,7 +59,7 @@ public class Splash extends AppCompatActivity {
        final Drawable drawable = mIcDownloadAnimator.getDrawable();
 
         if (drawable instanceof Animatable) {
-            //((Animatable) drawable).start();
+            ((Animatable) drawable).start();
         }
 
         final TextView textView = (TextView) findViewById(R.id.title);
@@ -79,7 +79,7 @@ public class Splash extends AppCompatActivity {
 
 
         // textView.startAnimation(myAnim2);
-        final ImageView mIcDownloadAnimator2 = (ImageView) findViewById(R.id.title_im);
+        final ImageView mIcDownloadAnimator2 = (ImageView) findViewById(R.id.app_n);
 
 
 
@@ -87,37 +87,9 @@ public class Splash extends AppCompatActivity {
         bg=findViewById(R.id.backg);
         title_cont=findViewById(R.id.title_cont);
 
-        Animation myAnim = AnimationUtils.loadAnimation(ctx, R.anim.slid_down_from_top);
-
-        myAnim.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                //  mIcDownloadAnimator2.startAnimation(myAnim2);
 
 
-                ImageView mIcDownloadAnimator = (ImageView) findViewById(R.id.logo);
-                final Drawable drawable = mIcDownloadAnimator.getDrawable();
-
-                if (drawable instanceof Animatable) {
-                    ((Animatable) drawable).start();
-                }
-
-               mIcDownloadAnimator2.animate().alpha(1f);
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        title_cont.startAnimation(myAnim);
-
+        utl.animate_avd(mIcDownloadAnimator2);
 
         pager_container=findViewById(R.id.pager_container);
         pager_container.setVisibility(View.GONE);

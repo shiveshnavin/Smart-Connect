@@ -46,6 +46,8 @@ dependencies {
     compile 'me.relex:circleindicator:1.2.2@aar'
     compile 'jp.wasabeef:recyclerview-animators:2.2.7'
 
+    compile 'com.jakewharton:butterknife:8.6.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
 
     //network
     compile 'com.amitshekhar.android:android-networking:0.0.1'
