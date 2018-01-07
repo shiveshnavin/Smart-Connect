@@ -67,8 +67,8 @@ public class Main extends BaseActivity {
 */
 
     String  MONG_HOST_IP = "http://192.168.4.1";
-    String AP_NAME="Ashivesh";
-    String AP_PASS="mahanraja";
+    String AP_NAME="Redmi";
+    String AP_PASS="shivesh123";
     String API_KEY="AEZAKMI";
 
 
@@ -76,12 +76,19 @@ public class Main extends BaseActivity {
 
 
 
+    boolean LOG_UP=false;
+
     public void addLog(String log)
     {
 
-        text.setText(text.getText().toString()+"\n----\n"+log);
+        if(LOG_UP)
+        text.setText( "\n-----\n"+log+text.getText().toString());
+        else {
+            text.setText(text.getText().toString()+ "\n-----\n"+log);
+
+        }
        Log.d("Logging",log);
-        nest.scrollBy(0,text.getBottom());
+
 
 
 
@@ -93,9 +100,15 @@ public class Main extends BaseActivity {
     public void addLog(String tag,String log)
     {
 
-        text.setText(text.getText().toString()+"\n--"+tag+"--\n"+log);
-        Log.d(tag,log);
-        nest.scrollBy(0,text.getBottom());
+
+
+        if(LOG_UP)
+            text.setText( "\n-----\n"+log+text.getText().toString());
+        else {
+            text.setText(text.getText().toString()+ "\n-----\n"+log);
+
+        }Log.d(tag,log);
+
 
 
 
@@ -119,8 +132,7 @@ public class Main extends BaseActivity {
     BroadcastReceiver mWifiScanReceiver =null,mWifiStateChangedReceiver=null,mConnectedReciever=null;
 
 
-    @BindView(R.id.scrolllog)ScrollView scrolllog;
-    @BindView(R.id.logs)TextView text;
+     @BindView(R.id.logs)TextView text;
     @BindView(R.id.cont)CoordinatorLayout cont;
     @BindView(R.id.wifi2) ImageView wifi2;
     @BindView(R.id.c_info) LinearLayout c_info;
@@ -197,7 +209,7 @@ public class Main extends BaseActivity {
 
                 header.setAlpha(alpha);
 
-               // utl.l("MAIN","Voff : "+verticalOffset+" \nAlpha "+alpha+"\n Max H "+oHie);
+               // addLog();("MAIN","Voff : "+verticalOffset+" \nAlpha "+alpha+"\n Max H "+oHie);
 
 
                 if (Math.abs(verticalOffset)-appBarLayout.getTotalScrollRange() == 0)
@@ -490,9 +502,12 @@ public class Main extends BaseActivity {
 
         utl.snack(cont,"Disconnecting !");
         unrgisterRecievers();
+        wifi2.setImageResource(R.drawable.avd_conn);
+
 
         mWifiManager.disconnect();
 
+        addLog("Disconnected");
 
 
 
@@ -527,7 +542,7 @@ public class Main extends BaseActivity {
                 }
             });
             //ApManager.configApState(act);
-            // utl.l();("WIFI_","AP Mode Toggle to : "+ApManager.isApOn(ctx));
+            // addLog();();("WIFI_","AP Mode Toggle to : "+ApManager.isApOn(ctx));
             return;
 
         }
@@ -608,15 +623,15 @@ public class Main extends BaseActivity {
 
         ssid=getCurrentNetwork();
 
-        utl.l("WIFI_","Connected to WIFI - "+ssid);
+        addLog("WIFI_","Connected to WIFI - "+ssid);
 
         if(ssid.contains(AP_NAME))
         {
-            utl.l("WIFI_","Connected to device ALREADY.");
+            addLog("WIFI_","Connected to device ALREADY.");
             getWaterFlowData();
         }
         else {
-            utl.l("WIFI_","Connected another AP ALREADY DIsconnecting....And connectingg to "+AP_NAME);
+            addLog("WIFI_","Connected another AP ALREADY DIsconnecting....And connectingg to "+AP_NAME);
 
 
             CUR_CONN_STATE=CONNECTING;
@@ -643,22 +658,28 @@ public class Main extends BaseActivity {
         mWifiScanReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context c, Intent intent) {
+
+                if(DISCON_MODE)
+                {
+                    return;
+                }
+
                 if (intent.getAction().equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
                     List<ScanResult> mScanResults = mWifiManager.getScanResults();
 
-                    utl.l("WIFI_", "WIFI STATE SCANNING STATE IS " + CUR_SCAN_STATE);
+                    addLog("WIFI_", "WIFI STATE SCANNING STATE IS " + CUR_SCAN_STATE);
 
                     String ssids = "";
                     for (ScanResult scanResults : mScanResults
                             ) {
 
-                        // utl.l();("WIFI_ RR : "+scanResults.SSID);
+                        // addLog();();("WIFI_ RR : "+scanResults.SSID);
 
                         ssids += "\n" + scanResults.SSID;
 
                     }
 
-                    utl.l("WIFI_", "Listing deviceds done .");
+                    addLog("WIFI_", "Listing deviceds done .");
                      utl.e("WIFI_", ssids);
 
                     if(ssids.contains(AP_NAME))
@@ -666,7 +687,7 @@ public class Main extends BaseActivity {
                         connect(AP_NAME,AP_PASS);
                     }
                     else {
-                        utl.l("Device Not in Range ! \nPlease Make Sure Device is turned on and is in Range and Pull Down to refresh .");
+                        addLog("Device Not in Range ! \nPlease Make Sure Device is turned on and is in Range and Pull Down to refresh .");
                     }
 
 
@@ -683,7 +704,10 @@ public class Main extends BaseActivity {
         mConnectedReciever=new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-
+                if(DISCON_MODE)
+                {
+                    return;
+                }
                 ConnectivityManager conMan = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo netInfo = conMan.getActiveNetworkInfo();
                 if (netInfo != null && netInfo.getType() == ConnectivityManager.TYPE_WIFI)
@@ -805,11 +829,11 @@ public class Main extends BaseActivity {
         CUR_CONN_STATE=CONNECTED;
 
 
-        utl.l("Connected to Device");
+        addLog("Connected to Device");
         wifi2.setImageResource(R.drawable.avd_coc);
 
         String url=MONG_HOST_IP+"/rpc/read_water_flow";
-        utl.l("WIFI_",url);
+        addLog("WIFI_",url);
         JSONObject jo=new JSONObject();
         try {
             jo.put("api_key",API_KEY);
@@ -838,7 +862,7 @@ public class Main extends BaseActivity {
                                 ;
 
 
-                        utl.l("Device Connected\nSensor API Response\n" + re);
+                        addLog("Device Connected\nSensor API Response\n" + re);
 
 
 
@@ -850,9 +874,9 @@ public class Main extends BaseActivity {
                 else {
 
 
-                    utl.l("Device Connected\nSensor API Response\n" + response.toString());
+                    addLog("Device Connected\nSensor API Response\n" + response.toString());
                 }
-                utl.l("WIFI_",response.toString());
+                addLog("WIFI_",response.toString());
 
 
 
@@ -861,8 +885,8 @@ public class Main extends BaseActivity {
             @Override
             public void onError(ANError ANError) {
 
-                utl.l(ANError.getErrorDetail());
-                utl.l(ANError.getErrorBody());
+                addLog(ANError.getErrorDetail());
+                addLog(ANError.getErrorBody());
 
             }
         });

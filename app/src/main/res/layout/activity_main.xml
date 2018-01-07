@@ -174,13 +174,13 @@
 
 
                     <ImageView
-                         android:padding="10dp"
+                         android:padding="4dp"
                         android:scaleType="fitXY"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:src="@drawable/avd_stat_app_name"
-                        android:id="@+id/logo_top"
-                        android:layout_width="130dp"
+                        android:src="@drawable/avd_conn"
+                        android:id="@+id/wifi2"
+                        android:layout_width="70dp"
 
                         android:layout_marginLeft="50dp"
                         android:layout_marginStart="50dp"
@@ -188,6 +188,7 @@
 
 
                     <ImageView
+                        android:visibility="invisible"
                         android:layout_marginLeft="20dp"
                         android:layout_marginStart="20dp"
                         android:layout_gravity="right"
