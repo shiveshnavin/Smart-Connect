@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import in.hoptec.smartconnect.Home;
+import in.hoptec.smartconnect.Main;
 import in.hoptec.smartconnect.R;
 import in.hoptec.smartconnect.Splash;
 import in.hoptec.smartconnect.utl;
@@ -101,7 +102,7 @@ public class Help_Fr0 extends Fragment {
                 if(islast)
                 {
                    // Splash.pager.setCurrentItem(0,true);
-                    Intent intent=new Intent(getContext(), Home.class);
+                    Intent intent=new Intent(getContext(), Main.class);
                     startActivity(intent);
 
                 }

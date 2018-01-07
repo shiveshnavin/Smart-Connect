@@ -410,7 +410,7 @@ public class Splash extends AppCompatActivity {
 
         if (permissionOK&&!alreadyLaunched) {
             alreadyLaunched=true;
-            Intent intent=new Intent(ctx, Home.class);
+            Intent intent=new Intent(ctx, Main.class);
             startActivity(intent);
             finish();
         }

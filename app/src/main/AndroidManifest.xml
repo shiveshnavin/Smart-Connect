@@ -41,6 +41,9 @@
             </intent-filter>
         </receiver>
         -->
+        <activity android:name=".Main"></activity>
+
+
         <activity android:name=".ConnectToDevice"></activity>
     </application>
 

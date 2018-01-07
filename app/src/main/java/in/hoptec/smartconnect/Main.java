@@ -36,8 +36,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import in.hoptec.wekare.adapters.BoxesAdapter;
-import in.hoptec.wekare.utils.GenricCallback;
+import in.hoptec.smartconnect.adapters.BoxesAdapter;
 import jp.wasabeef.recyclerview.adapters.SlideInBottomAnimationAdapter;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
 
@@ -166,7 +165,6 @@ public class Main extends BaseActivity {
             box_list.add(new BoxesAdapter.Dummy(i));
         } while (i++<70);
 
-        setUpFeed(box_list);
 
     }
 
@@ -222,7 +220,6 @@ public class Main extends BaseActivity {
                             box_list.add(new BoxesAdapter.Dummy(i));
                         } while (i++<10);
 
-                        setUpFeed(box_list);
 
                     }
                 },2000);
@@ -319,19 +316,19 @@ public class Main extends BaseActivity {
 
                 switch (id){
                     case R.id.home:
-                        Toast.makeText(getApplicationContext(),getstring(R.string.dr_home),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),"Home",Toast.LENGTH_SHORT).show();
                         drawerLayout.closeDrawers();
                         break;
-                    case R.id.faq:
-                        Toast.makeText(getApplicationContext(),getstring(R.string.dr_faq),Toast.LENGTH_SHORT).show();
+                    case R.id.cloud:
+                        Toast.makeText(getApplicationContext(),"Sensors",Toast.LENGTH_SHORT).show();
                         drawerLayout.closeDrawers();
                         break;
-                    case R.id.aff:
-                        Toast.makeText(getApplicationContext(),getstring(R.string.dr_aff), Toast.LENGTH_SHORT).show();
+                    case R.id.settings:
+                        Toast.makeText(getApplicationContext(),"Reset", Toast.LENGTH_SHORT).show();
                         drawerLayout.closeDrawers();
                         break;
                     case R.id.about:
-                        Toast.makeText(getApplicationContext(),getstring(R.string.dr_about), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),"About", Toast.LENGTH_SHORT).show();
                         drawerLayout.closeDrawers();
                         break;
 
@@ -385,7 +382,7 @@ public class Main extends BaseActivity {
     {
 
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_main, menu);
+        menuInflater.inflate(R.menu.menu_home, menu);
         return true;
     }
 
@@ -400,31 +397,9 @@ public class Main extends BaseActivity {
         switch (item.getItemId())
         {
 
-            case  R.id.account:
+            case  R.id.about:
 
-                utl.snack(act, getstring(R.string.a_logout),getstring(R.string.logout), new GenricCallback() {
-                    @Override
-                    public void onStart() {
-                        utl.logout();;
-                        startActivity(new Intent(ctx,Splash.class));
-                        finish();
-                    }
 
-                    @Override
-                    public void onDo(Object obj) {
-
-                    }
-
-                    @Override
-                    public void onDo(Object obj, Object obj2) {
-
-                    }
-
-                    @Override
-                    public void onDone(Object obj) {
-
-                    }
-                });
 
                 return true;
             default:
@@ -470,78 +445,9 @@ public class Main extends BaseActivity {
     }
     @BindView(R.id.swipe)SwipeRefreshLayout swipe;
     @BindView(R.id.include)NestedScrollView nest;
-    @BindView(R.id.rec)RecyclerView recyclerView;
-    RecyclerView.LayoutManager mLayoutManager;
+     RecyclerView.LayoutManager mLayoutManager;
     ArrayList<BoxesAdapter.Dummy> box_list;
     BoxesAdapter mAdapter;
-    public void setUpFeed(final ArrayList<BoxesAdapter.Dummy> box_list)
-    {
-
-
-         mLayoutManager = new LinearLayoutManager(ctx);
-        recyclerView.setLayoutManager(mLayoutManager);
-
-        // Initialize a new instance of RecyclerView Adapter instance
-        mAdapter = new BoxesAdapter(ctx, box_list){
-
-
-            @Override
-            public void click(int pos, BoxesAdapter.Dummy cat) {
-                super.click(pos,cat);
-
-                if(pos>= box_list.size())
-                    return;
-                box_list.remove(cat);
-                notifyItemRemoved(pos);
-                notifyDataSetChanged();
-
-
-            }
-
-            @Override
-            public void clickLong(int pos) {
-                super.clickLong(pos);
-
-                //  box_list.add(new BoxesAdapter.Dummy());
-
-                //  notifyItemInserted(pos);
-                //notifyDataSetChanged();
-
-
-            }
-        };
-
-
-
-        LandingAnimator animator = new LandingAnimator(new OvershootInterpolator(1f));
-        recyclerView.setItemAnimator(animator);
-        SlideInBottomAnimationAdapter alphaAdapter = new SlideInBottomAnimationAdapter(mAdapter);
-        alphaAdapter.setDuration(1000);
-
-        recyclerView.setNestedScrollingEnabled(false);
-
-
-        recyclerView.setAdapter(alphaAdapter);
-
-        recyclerView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                nest.smoothScrollBy(0,-201);
-
-
-            }
-        },20);
-
-
-
-
-
-    }
-
-
-
-
 
 
 
