@@ -14,6 +14,7 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -66,7 +67,7 @@ public class Main extends BaseActivity {
     String API_KEY="AEZAKMI";
 */
 
-    String  MONG_HOST_IP = "http://192.168.4.1";
+    String  MONG_HOST_IP = "http://192.168.43.32";
     String AP_NAME="Redmi";
     String AP_PASS="shivesh123";
     String API_KEY="AEZAKMI";
@@ -81,15 +82,17 @@ public class Main extends BaseActivity {
     public void addLog(String log)
     {
 
+        String tx="";
         if(LOG_UP)
-        text.setText( "\n-----\n"+log+text.getText().toString());
+        tx=( "\n-----\n"+log+text.getText().toString());
         else {
-            text.setText(text.getText().toString()+ "\n-----\n"+log);
+            tx=(text.getText().toString()+ "\n-----\n"+log);
 
         }
-       Log.d("Logging",log);
+       Log.d("Logging",""+log);
 
 
+        text.setText(tx);
 
 
     }
@@ -102,13 +105,15 @@ public class Main extends BaseActivity {
 
 
 
+        String tx="";
         if(LOG_UP)
-            text.setText( "\n-----\n"+log+text.getText().toString());
+            tx=( "\n-----\n"+log+text.getText().toString());
         else {
-            text.setText(text.getText().toString()+ "\n-----\n"+log);
+            tx=(text.getText().toString()+ "\n-----\n"+log);
 
         }Log.d(tag,log);
 
+        text.setText(tx);
 
 
 
@@ -384,6 +389,7 @@ public class Main extends BaseActivity {
                         break;
                     case R.id.settings:
                         Toast.makeText(getApplicationContext(),"Reset", Toast.LENGTH_SHORT).show();
+                        reset();
                         drawerLayout.closeDrawers();
                         break;
                     case R.id.about:
@@ -467,6 +473,21 @@ public class Main extends BaseActivity {
     }
 
 
+    public void reset()
+    {
+
+        text.setText("[RESET]");
+        disconnect();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                connect();
+            }
+        },1000);
+
+
+    }
 
 
     public void connect()
@@ -680,7 +701,7 @@ public class Main extends BaseActivity {
                     }
 
                     addLog("WIFI_", "Listing deviceds done .");
-                     utl.e("WIFI_", ssids);
+                     addLog("WIFI_", ssids);
 
                     if(ssids.contains(AP_NAME))
                     {
