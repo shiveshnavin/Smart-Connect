@@ -1,24 +1,31 @@
 package in.hoptec.smartconnect;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.wifi.ScanResult;
+import android.net.wifi.SupplicantState;
+import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatDelegate;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,21 +33,77 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import in.hoptec.smartconnect.adapters.BoxesAdapter;
-import jp.wasabeef.recyclerview.adapters.SlideInBottomAnimationAdapter;
-import jp.wasabeef.recyclerview.animators.LandingAnimator;
+import in.hoptec.smartconnect.utils.ApManager;
 
 public class Main extends BaseActivity {
+
+/*
+*
+*
+*
+    String  MONG_HOST_IP = "http://192.168.4.1";
+    String AP_NAME="MONG_TEST";
+    String AP_PASS="password";
+    String API_KEY="AEZAKMI";
+*/
+
+    String  MONG_HOST_IP = "http://192.168.4.1";
+    String AP_NAME="Ashivesh";
+    String AP_PASS="mahanraja";
+    String API_KEY="AEZAKMI";
+
+
+
+
+
+
+    public void addLog(String log)
+    {
+
+        text.setText(text.getText().toString()+"\n----\n"+log);
+       Log.d("Logging",log);
+        nest.scrollBy(0,text.getBottom());
+
+
+
+    }
+
+    boolean DISCON_MODE=false;
+
+
+    public void addLog(String tag,String log)
+    {
+
+        text.setText(text.getText().toString()+"\n--"+tag+"--\n"+log);
+        Log.d(tag,log);
+        nest.scrollBy(0,text.getBottom());
+
+
+
+    }
+
+
+
+
 
     AppBarLayout appBarLayout;
     LinearLayout header;
@@ -52,8 +115,14 @@ public class Main extends BaseActivity {
     }
 
 
-    @BindView(R.id.cont)CoordinatorLayout cont;
 
+    BroadcastReceiver mWifiScanReceiver =null,mWifiStateChangedReceiver=null,mConnectedReciever=null;
+
+
+    @BindView(R.id.scrolllog)ScrollView scrolllog;
+    @BindView(R.id.logs)TextView text;
+    @BindView(R.id.cont)CoordinatorLayout cont;
+    @BindView(R.id.wifi2) ImageView wifi2;
     @BindView(R.id.c_info) LinearLayout c_info;
     @BindView(R.id.c_help) LinearLayout c_help;
     @BindView(R.id.c_donate) LinearLayout c_donate;
@@ -86,7 +155,7 @@ public class Main extends BaseActivity {
             public void onClick(View view) {
 
 
-                getHelp();
+                connect();
 
             }
         });
@@ -96,7 +165,7 @@ public class Main extends BaseActivity {
             @Override
             public void onClick(View view) {
 
-                donate();
+                refresh();
 
 
             }
@@ -128,7 +197,7 @@ public class Main extends BaseActivity {
 
                 header.setAlpha(alpha);
 
-                utl.l("MAIN","Voff : "+verticalOffset+" \nAlpha "+alpha+"\n Max H "+oHie);
+               // utl.l("MAIN","Voff : "+verticalOffset+" \nAlpha "+alpha+"\n Max H "+oHie);
 
 
                 if (Math.abs(verticalOffset)-appBarLayout.getTotalScrollRange() == 0)
@@ -153,17 +222,17 @@ public class Main extends BaseActivity {
         fab_help.animate().alpha(0f);
         fab_donate.animate().alpha(0f);
 
+
         initNavigationDrawer();;
         expandToolbar();
         initOnCLickListeners();
 
 
 
-        box_list =new ArrayList<>();
-        int i=0;
-        do {
-            box_list.add(new BoxesAdapter.Dummy(i));
-        } while (i++<70);
+        mWifiManager = (WifiManager) act.getSystemService(WIFI_SERVICE);
+
+
+        m_start();
 
 
     }
@@ -174,7 +243,7 @@ public class Main extends BaseActivity {
         c_help.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getHelp();
+                connect();
             }
         });
         setAnimPressRel(c_help);
@@ -184,7 +253,7 @@ public class Main extends BaseActivity {
         c_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                info();
+                disconnect();
             }
         });
         setAnimPressRel(c_info);
@@ -194,7 +263,7 @@ public class Main extends BaseActivity {
         c_donate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                donate();
+                refresh();
             }
         });
         setAnimPressRel(c_donate);
@@ -203,28 +272,6 @@ public class Main extends BaseActivity {
         setAnimPressRel(fab_help);
         setAnimPressRel(fab_donate);
 
-
-        swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        swipe.setRefreshing(false);
-
-
-                        box_list =new ArrayList<>();
-                        int i=0;
-                        do {
-                            box_list.add(new BoxesAdapter.Dummy(i));
-                        } while (i++<10);
-
-
-                    }
-                },2000);
-            }
-        });
 
 
 
@@ -410,45 +457,422 @@ public class Main extends BaseActivity {
 
 
 
-    public void getHelp()
+    public void connect()
     {
+        DISCON_MODE=false;
 
 
-        utl.snack(cont,"Get Help !");
+        utl.snack(cont,"Connecting !");
 
+        m_start();
 
     }
 
 
 
-    public void donate()
+    public void refresh()
     {
+        DISCON_MODE=false;
 
 
-        utl.snack(cont,"Donate !");
+        utl.snack(cont,"Refreshing !");
 
+        m_start();
 
 
     }
 
-    public void info()
+    public void disconnect()
     {
 
 
+    DISCON_MODE=true;
 
-        utl.snack(cont,"Info !");
+        utl.snack(cont,"Disconnecting !");
+        unrgisterRecievers();
 
+        mWifiManager.disconnect();
 
 
 
 
     }
-    @BindView(R.id.swipe)SwipeRefreshLayout swipe;
-    @BindView(R.id.include)NestedScrollView nest;
+    @Nullable @BindView(R.id.include)NestedScrollView nest;
      RecyclerView.LayoutManager mLayoutManager;
     ArrayList<BoxesAdapter.Dummy> box_list;
     BoxesAdapter mAdapter;
 
+
+    public static WifiManager mWifiManager;
+
+     public void m_start()
+    {
+
+        if(DISCON_MODE)
+        {
+            return;
+        }
+
+        initRecievers();
+        wifi2.setImageResource(R.drawable.avd_conn);
+        utl.animate_avd(wifi2);
+
+
+        if(ApManager.isApOn(ctx))
+        {
+            utl.diag(ctx, "Hotspot On !", "Please turn OFF the WiFi hotspot and click OK to continue !", "TURNED OFF", new utl.ClickCallBack() {
+                @Override
+                public void done(DialogInterface dialogInterface) {
+                    m_start();
+                }
+            });
+            //ApManager.configApState(act);
+            // utl.l();("WIFI_","AP Mode Toggle to : "+ApManager.isApOn(ctx));
+            return;
+
+        }
+
+        if(utl.isWifiConnected(act))
+        {
+
+            isWifiConnectedAlready();
+
+        }
+        else {
+            registerRecievers(0);
+
+
+
+            if(isWifiOn()){
+
+
+
+
+            }
+            else {
+
+                mWifiManager.setWifiEnabled(true);
+
+
+            }
+
+
+
+        }
+
+
+
+    }
+
+    public boolean isWifiOn()
+    {
+
+        boolean isWifiOn=false;
+        if(mWifiManager.getWifiState()== WifiManager.WIFI_STATE_ENABLED)
+        {
+            isWifiOn=true;
+        }
+        else {
+            isWifiOn=false;
+        }
+        return isWifiOn;
+
+
+
+    }
+
+
+    public String  getCurrentNetwork()
+    {
+
+
+        String ssid="";
+
+        WifiInfo wifiInfo;
+
+
+
+        wifiInfo = mWifiManager.getConnectionInfo();
+        if (wifiInfo.getSupplicantState() == SupplicantState.COMPLETED) {
+            ssid =""+ wifiInfo.getSSID();
+        }
+
+
+        return ssid;
+
+    }
+
+    public void isWifiConnectedAlready()
+    {
+
+
+        ssid=getCurrentNetwork();
+
+        utl.l("WIFI_","Connected to WIFI - "+ssid);
+
+        if(ssid.contains(AP_NAME))
+        {
+            utl.l("WIFI_","Connected to device ALREADY.");
+            getWaterFlowData();
+        }
+        else {
+            utl.l("WIFI_","Connected another AP ALREADY DIsconnecting....And connectingg to "+AP_NAME);
+
+
+            CUR_CONN_STATE=CONNECTING;
+            mWifiManager.disconnect();
+            registerRecievers(0);
+
+
+
+        }
+
+
+
+
+    }
+
+
+    public final int I_SCAN_REC=12,I_WIFI_STATE_REC=232,I_I_WIFI_CONN_REC=3432;
+    String CUR_SCAN_STATE="NOT RUNNING",RUNNING="RUNNING",COMPLETED="COMPLETED";
+    String NOT_CONNECTED="NOT CONNECTED",CUR_CONN_STATE=NOT_CONNECTED,CONNECTING="CONNECTING",CONNECTED="CONNECTED";
+    public void initRecievers()
+    {
+
+
+        mWifiScanReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context c, Intent intent) {
+                if (intent.getAction().equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
+                    List<ScanResult> mScanResults = mWifiManager.getScanResults();
+
+                    utl.l("WIFI_", "WIFI STATE SCANNING STATE IS " + CUR_SCAN_STATE);
+
+                    String ssids = "";
+                    for (ScanResult scanResults : mScanResults
+                            ) {
+
+                        // utl.l();("WIFI_ RR : "+scanResults.SSID);
+
+                        ssids += "\n" + scanResults.SSID;
+
+                    }
+
+                    utl.l("WIFI_", "Listing deviceds done .");
+                     utl.e("WIFI_", ssids);
+
+                    if(ssids.contains(AP_NAME))
+                    {
+                        connect(AP_NAME,AP_PASS);
+                    }
+                    else {
+                        utl.l("Device Not in Range ! \nPlease Make Sure Device is turned on and is in Range and Pull Down to refresh .");
+                    }
+
+
+                }
+            }
+
+
+        };
+
+
+
+
+
+        mConnectedReciever=new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                ConnectivityManager conMan = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo netInfo = conMan.getActiveNetworkInfo();
+                if (netInfo != null && netInfo.getType() == ConnectivityManager.TYPE_WIFI)
+                {
+
+
+                    isWifiConnectedAlready();
+
+                    Log.d("WIFI_", "Have Wifi Connection");
+                }
+                else{
+                    Log.d("WIFI_", "Don't have Wifi Connection");
+
+                    if(mWifiManager.getWifiState()==WifiManager.WIFI_STATE_ENABLED)
+                    {
+                        mWifiManager.startScan();
+                        //connect(AP_NAME,AP_PASS);
+                    }
+
+
+                }
+
+
+            }
+        };
+
+
+
+
+
+    }
+
+    public void registerRecievers(int n)
+    {
+
+        if (n==0) {
+            //act.registerReceiver(mWifiStateChangedReceiver,new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
+
+            act.registerReceiver(mWifiScanReceiver,new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+
+            act.registerReceiver(mConnectedReciever,new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        } else if(n==I_WIFI_STATE_REC) {
+            act.registerReceiver(mWifiStateChangedReceiver,new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
+
+
+        }else if(n==I_SCAN_REC) {
+            act.registerReceiver(mWifiScanReceiver,new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+
+
+        }
+        else if(n==I_I_WIFI_CONN_REC) {
+            act.registerReceiver(mConnectedReciever,new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+
+
+        }
+
+
+    }
+    boolean connectedOnce=false;
+
+    @Override
+    public void onDestroy() {
+        unrgisterRecievers();
+
+        super.onDestroy();
+
+
+
+    }
+
+    public void unrgisterRecievers()
+    {
+        try {
+            act.unregisterReceiver(mWifiStateChangedReceiver);
+        } catch (Exception e) {
+        }
+
+        try {
+            act.unregisterReceiver(mWifiScanReceiver);
+        } catch (Exception e) {
+        }
+
+        try {
+            act.unregisterReceiver(mConnectedReciever);
+        } catch (Exception e) {
+
+        }
+
+
+    }
+
+     String ssid="";
+
+
+    public void connect(String ssid,String key)
+    {
+
+
+        IntentFilter it=new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+
+
+        WifiConfiguration wifiConfig = new WifiConfiguration();
+        wifiConfig.SSID = String.format("\"%s\"", ssid);
+        wifiConfig.preSharedKey = String.format("\"%s\"", key);
+
+        int netId = mWifiManager.addNetwork(wifiConfig);
+        mWifiManager.disconnect();
+        mWifiManager.enableNetwork(netId, true);
+        mWifiManager.reconnect();
+        // m_start();
+
+    }
+
+    public void getWaterFlowData()
+    {
+        unrgisterRecievers();
+
+
+        CUR_CONN_STATE=CONNECTED;
+
+
+        utl.l("Connected to Device");
+        wifi2.setImageResource(R.drawable.avd_coc);
+
+        String url=MONG_HOST_IP+"/rpc/read_water_flow";
+        utl.l("WIFI_",url);
+        JSONObject jo=new JSONObject();
+        try {
+            jo.put("api_key",API_KEY);
+            jo.put("sensor_id",10);
+
+
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        AndroidNetworking.post(url).addJSONObjectBody(jo).build().getAsJSONObject(new JSONObjectRequestListener() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+
+                if(response.toString().toLowerCase().contains("success"))
+                {
+                    try {
+                        String re="_____\n"+
+                                "\n"+"Free RAM : "+response.getString("free_ram")+
+                                "\n"+"Uptime : "+response.getString("uptime")+
+                                "\n"+"Status : "+response.getString("status")+
+                                "\nSensor Data : "+response.getString("sensor_10")
+
+                                ;
+
+
+                        utl.l("Device Connected\nSensor API Response\n" + re);
+
+
+
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+
+
+                    utl.l("Device Connected\nSensor API Response\n" + response.toString());
+                }
+                utl.l("WIFI_",response.toString());
+
+
+
+            }
+
+            @Override
+            public void onError(ANError ANError) {
+
+                utl.l(ANError.getErrorDetail());
+                utl.l(ANError.getErrorBody());
+
+            }
+        });
+
+        ;
+
+
+
+
+    }
 
 
 

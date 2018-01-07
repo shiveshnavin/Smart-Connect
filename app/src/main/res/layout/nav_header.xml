@@ -18,7 +18,7 @@
 
         <ImageView
             android:id="@+id/logo"
-            android:src="@drawable/avd_logo_sm"
+            android:src="@drawable/avd_logo"
             android:layout_width="0dp"
             android:layout_gravity="center"
             android:layout_weight="0.6"
@@ -27,7 +27,7 @@
 
         <ImageView
             android:id="@+id/appn"
-            android:src="@drawable/ic_my_logo18"
+            android:src="@drawable/avd_app_n_2"
             android:layout_width="0dp"
             android:layout_gravity="center"
             android:layout_weight="1"

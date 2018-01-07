@@ -40,6 +40,9 @@ import in.hoptec.smartconnect.fragments.Help_Fr0;
 import me.relex.circleindicator.CircleIndicator;
 
 public class Splash extends AppCompatActivity {
+
+    boolean SHOW_HELP=false;
+
     View pager_container,title_cont;
 
        View bg;
@@ -99,7 +102,7 @@ public class Splash extends AppCompatActivity {
             @Override
             public void run() {
 
-                if(utl.getKey("firstinstall",ctx)==null||true)
+                if(utl.getKey("firstinstall",ctx)==null||SHOW_HELP)
                 {
 
                     if (drawable instanceof Animatable) {

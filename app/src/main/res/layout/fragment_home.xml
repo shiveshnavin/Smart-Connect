@@ -1,86 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/content_home"
     android:layout_width="match_parent"
+    android:id="@+id/nest"
+    android:background="@color/white"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/home_v_margin"
-    android:paddingLeft="@dimen/home_v_margin"
-    android:paddingRight="@dimen/home_v_margin"
-    android:paddingTop="@dimen/home_v_margin"
-    android:background="#fff"
-    >
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+     tools:showIn="@layout/activity_main">
 
-
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipe"
+    <RelativeLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ImageView
+            android:src="@drawable/avd_conn"
+            android:layout_centerInParent="true"
+            android:id="@+id/wifi2"
+            android:layout_width="50dp"
+            android:layout_height="50dp" />
 
-    <ScrollView
-        android:layout_below="@+id/wifi"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rec"
+            android:layout_below="@+id/app"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <LinearLayout android:layout_width="match_parent"
-            android:orientation="vertical"
+
+
+
+        </android.support.v7.widget.RecyclerView>
+
+
+        <com.daniribalbert.customfontlib.views.CustomFontTextView
+            app:font="Avenir-Medium"
+            android:padding="10dp"
+            android:id="@+id/app"
+            android:textColor="@color/colorAccent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="LOG"
+            android:textSize="15sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+        <View
+            android:layout_margin="5dp"
+            android:background="@color/colorAccent"
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+/>
+
+        <RelativeLayout
+            android:minHeight="200dp"
             android:layout_height="wrap_content"
-
+            android:layout_width="match_parent"
             >
-            <ImageView
 
 
-                android:layout_gravity="center"
-                android:layout_marginTop="30dp"
-                android:id="@+id/wifi"
-                android:layout_centerHorizontal="true"
-                android:layout_width="100dp"
-                android:layout_height="100dp" />
-
-
-            <com.daniribalbert.customfontlib.views.CustomFontTextView android:layout_width="match_parent"
-                android:textSize="17sp"
-                android:textColor="@color/grey_600"
-                android:id="@+id/text"
-                android:gravity="center"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                app:font="Avenir-Medium"
-                android:text="Connecting..."
-                android:layout_height="wrap_content" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/boxes"
-                android:visibility="gone"
-
-                android:background="@color/white"
+            <ScrollView
+                android:id="@+id/scrolllog"
+                android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="vertical"
                 >
-            </android.support.v7.widget.RecyclerView>
+
+                <com.daniribalbert.customfontlib.views.CustomFontTextView
+                    app:font="Avenir-Medium"
+                    android:id="@+id/logs"
+                    android:padding="15dp"
+                    android:textColor="@color/grey_600"
+                    android:layout_gravity="left"
+                    android:gravity="left"
+                    android:text="[START]"
+                    android:textSize="15sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </ScrollView>
+
+        </RelativeLayout>
 
 
-        </LinearLayout>
-    </ScrollView>
-
-
-    </android.support.v4.widget.SwipeRefreshLayout>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:id="@+id/swipe"
+            >
+        </android.support.v4.widget.SwipeRefreshLayout>
+    </RelativeLayout>
 </android.support.v4.widget.NestedScrollView>
