@@ -67,9 +67,9 @@ public class Main extends BaseActivity {
     String API_KEY="AEZAKMI";
 */
 
-    String  MONG_HOST_IP = "http://192.168.43.32";
-    String AP_NAME="Redmi";
-    String AP_PASS="shivesh123";
+    String  MONG_HOST_IP = "http://192.168.4.1";
+    String AP_NAME="MONG_TEST";
+    String AP_PASS="password";
     String API_KEY="AEZAKMI";
 
 
