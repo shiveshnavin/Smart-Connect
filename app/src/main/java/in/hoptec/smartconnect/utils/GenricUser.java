@@ -1,4 +1,4 @@
-package in.hoptec.smartconnect;
+package in.hoptec.smartconnect.utils;
  
 
 /**

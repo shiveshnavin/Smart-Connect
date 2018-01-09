@@ -16,8 +16,7 @@ public class BaseActivity  extends AppCompatActivity {
     public String getstring(@StringRes int res)
     {
 
-
-    return getResources().getString(res);
+         return getResources().getString(res);
 
     }
 

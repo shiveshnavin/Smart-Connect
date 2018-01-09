@@ -49,7 +49,7 @@
 
 
                 <LinearLayout
-                    android:id="@+id/c_help"
+                    android:id="@+id/connect"
                     android:layout_weight="0.3"
                     android:orientation="vertical"
                     android:layout_width="0dp"
@@ -84,7 +84,7 @@
 
 
                 <LinearLayout
-                    android:id="@+id/c_donate"
+                    android:id="@+id/refresh"
                     android:layout_weight="0.3"
                     android:orientation="vertical"
                     android:layout_width="0dp"
@@ -120,7 +120,7 @@
 
 
                 <LinearLayout
-                    android:id="@+id/c_info"
+                    android:id="@+id/disconnect"
                     android:layout_weight="0.3"
                     android:orientation="vertical"
                     android:layout_width="0dp"
@@ -179,7 +179,7 @@
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:src="@drawable/avd_conn"
-                        android:id="@+id/wifi2"
+                        android:id="@+id/wifiAction"
                         android:layout_width="70dp"
 
                         android:layout_marginLeft="50dp"

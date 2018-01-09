@@ -25,7 +25,6 @@ import android.os.Build;
 import android.os.CountDownTimer;
 import android.provider.MediaStore;
 import android.support.annotation.ColorRes;
-import android.support.annotation.DrawableRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -66,7 +65,10 @@ import java.util.Random;
 import java.util.UUID;
 
 
+import in.hoptec.smartconnect.utils.Constants;
+import in.hoptec.smartconnect.utils.FileOperations;
 import in.hoptec.smartconnect.utils.GenricCallback;
+import in.hoptec.smartconnect.utils.GenricUser;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -77,9 +79,6 @@ import static android.content.Context.MODE_PRIVATE;
 public class utl {
 
     public static boolean ANIM_LV1_ENABLED=true;
-
-
-
     public static boolean DISPLAY_ENABLED=true;
     public static boolean DEBUG_ENABLED=true;
 
@@ -621,7 +620,7 @@ public class utl {
         snackbar.setAction("" + a, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cb.onStart();
+                cb.onCall();
             }
         });
         View snackbarView = snackbar.getView();
@@ -651,7 +650,7 @@ public class utl {
         snackbar.setAction("" + a, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cb.onStart();
+                cb.onCall();
             }
         });
         View snackbarView = snackbar.getView();
@@ -769,8 +768,6 @@ public class utl {
     }
 
     public static  Integer TYPE_EMAIL=120,TYPE_PHONE=293,TYPE_DEF=101;
-
-
     public static EditText input  ;
 
     public static AlertDialog inputDialog(Context ctx,String title,String message,final int TYPE,final InputDialogCallback callback)
@@ -858,7 +855,7 @@ public class utl {
 
 
 
-    public static final String MY_PREFS_NAME = "filebox";
+    public static final String MY_PREFS_NAME = "scon";
     public static  SharedPreferences.Editor editor;// = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
 
     public static void setKey(String k,String v,Context ctx)
@@ -984,9 +981,6 @@ public class utl {
         return  true;
     }
 
-
-
-
     public static String readFile(String file)
     {
         String data= Constants.folder+"/"+file;
@@ -1044,7 +1038,7 @@ public class utl {
         return  true;
     }
 
-    public static  boolean writeUserData(GenricUser guser,Context ctx)
+    public static  boolean writeUserData(GenricUser guser, Context ctx)
     {
         String data= Constants.userDataFile();
         FileOperations fop=new FileOperations();

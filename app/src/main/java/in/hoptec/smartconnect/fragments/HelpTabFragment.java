@@ -1,9 +1,7 @@
 package in.hoptec.smartconnect.fragments;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -15,12 +13,10 @@ import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import in.hoptec.smartconnect.Home;
-import in.hoptec.smartconnect.Main;
+ import in.hoptec.smartconnect.WifiConnectActivity;
 import in.hoptec.smartconnect.R;
 import in.hoptec.smartconnect.Splash;
 import in.hoptec.smartconnect.utl;
@@ -29,7 +25,7 @@ import in.hoptec.smartconnect.utl;
  * Created by shivesh on 29/12/17.
  */
 
-public class Help_Fr0 extends Fragment {
+public class HelpTabFragment extends Fragment {
 
 
     public int pos=0;
@@ -40,17 +36,14 @@ public class Help_Fr0 extends Fragment {
 
     public static final String EXTRA_MESSAGE = "EXTRA_MESSAGE";
 
-    public static final Help_Fr0 newInstance(@ColorRes int clr, @DrawableRes int img, boolean isLast, String message)
+    public static HelpTabFragment newInstance(@ColorRes int clr, @DrawableRes int img, boolean isLast, String message)
     {
-        Help_Fr0 f = new Help_Fr0();
-
+        HelpTabFragment f = new HelpTabFragment();
         Bundle bdl = new Bundle(1);
-
         bdl.putString(EXTRA_MESSAGE, message);
         bdl.putInt("img",img);
         bdl.putInt("clr",clr);
         bdl.putBoolean("islast",isLast);
-
         f.setArguments(bdl);
 
         return f;
@@ -59,28 +52,17 @@ public class Help_Fr0 extends Fragment {
 
 
     Activity mActivity;
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 
         mActivity =getActivity();
-
-
-       final  View v = inflater.inflate(R.layout.fragment_help, container, false);
-
-
+        final  View v = inflater.inflate(R.layout.fragment_help, container, false);
         TextView messageTextView = (TextView)v.findViewById(R.id.desc);
-
         AppCompatButton btn=(AppCompatButton)v.findViewById(R.id.next);
 
         try {
                messageTextView.setTextColor((ContextCompat.getColor(getContext(),clr)));
-
                btn.setSupportBackgroundTintList(ContextCompat.getColorStateList(mActivity, clr));
-
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -98,13 +80,9 @@ public class Help_Fr0 extends Fragment {
                 {
                     Splash.pager.setCurrentItem(Splash.curItem+1,true);
                 }
-
-                if(islast)
-                {
-                   // Splash.pager.setCurrentItem(0,true);
-                    Intent intent=new Intent(getContext(), Main.class);
+                if(islast) {
+                    Intent intent = new Intent(getContext(), WifiConnectActivity.class);
                     startActivity(intent);
-
                 }
 
             }
@@ -114,11 +92,6 @@ public class Help_Fr0 extends Fragment {
         ImageView img = (ImageView)v.findViewById(R.id.img);
         img.setImageResource(image);
         utl.changeColorDrawable(img,clr);
-        Drawable drawable = img.getDrawable();
-
-        if (drawable instanceof Animatable) {
-           // ((Animatable) drawable).start();
-        }
 
         messageTextView.setText(message);
         return v;

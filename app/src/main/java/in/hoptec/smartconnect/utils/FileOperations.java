@@ -8,9 +8,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import android.util.Log;
-
-
-public class FileOperations {
+public class FileOperations {     
     public FileOperations() {
     }
     public Boolean write(String fname, String fcontent){

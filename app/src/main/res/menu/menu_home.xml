@@ -7,11 +7,11 @@
             android:icon="@drawable/ic_home_black_48dp"/>
 
         <item
-            android:id="@+id/cloud"
+            android:id="@+id/sensors"
             android:title="Sensors"
             android:icon="@drawable/ic_cloud_circle_black_48dp"/>
         <item
-            android:id="@+id/settings"
+            android:id="@+id/reset"
             android:title="Reset"
             android:icon="@drawable/ic_settings_black_48dp"/>
          <item

@@ -39,21 +39,13 @@ public class ApManager {
             return true;
         }
         catch (Exception e) {
-/*
-            utl.toast(context,"Please Give Settings permission for this to work !");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (!Settings.System.canWrite(context.getApplicationContext())) {
-                    Intent intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS, Uri.parse("package:" + context.getPackageName()));
-                    context.startActivityForResult(intent, 200);
-
-                }
-            }*/
 
             e.printStackTrace();
         }
         return false;
     }
-} // end of class
+}
+
 
 
 

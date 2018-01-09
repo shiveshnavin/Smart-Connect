@@ -1,9 +1,12 @@
-package in.hoptec.smartconnect;
+package in.hoptec.smartconnect.utils;
 
 import android.content.Context;
 import android.os.Environment;
 
 import java.io.File;
+
+import in.hoptec.smartconnect.R;
+import in.hoptec.smartconnect.utl;
 
 /**
  * Created by shivesh on 28/6/17.
@@ -15,16 +18,6 @@ public class Constants {
 
     public static String HOST="http://192.168.23.3";
 
-    public static String API_USER_REG_GET="/createuser.php";
-    public static String API_USER_LOGIN_GET="/login.php";
-
-    public static String FILE_DB_INDEX =".vault_meta.json";
-    public static String FILE_DB_FILES =".vault_files.json";
-    public static String FILE_DB =".vault_files.json";
-
-
-    public static boolean IS_ANIMATED_BG_SPLASH=false;
-    public static boolean isPdCancelable=true;
 
     public static String folder;
     public static String datafile;
