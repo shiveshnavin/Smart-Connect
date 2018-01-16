@@ -390,6 +390,7 @@ public class utl {
     {
         ConnectivityManager connManager = (ConnectivityManager) act.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+//        NetworkInfo mWifi = connManager.getActiveNetworkInfo();
 
         if (mWifi.isConnected()) {
 

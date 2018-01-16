@@ -7,12 +7,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
+import android.net.NetworkRequest;
 import android.net.wifi.ScanResult;
 import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
@@ -84,6 +88,8 @@ public class WifiConnectActivity extends BaseActivity {
     private WifiManager mWifiManager;
     private final int I_SCAN_REC=12,I_WIFI_STATE_REC=232,I_I_WIFI_CONN_REC=3432;
     private boolean isAppInDisconnectionMode =false;
+    private boolean isScanning=false;
+
 
 
     @Override
@@ -138,8 +144,16 @@ public class WifiConnectActivity extends BaseActivity {
 
         mWifiManager = (WifiManager) act.getSystemService(WIFI_SERVICE);
 
-        startConnection();
 
+
+    }
+
+
+    @Override
+    protected void onPostResume() {
+
+        super.onPostResume();
+        startConnection();
 
     }
 
@@ -415,12 +429,16 @@ public class WifiConnectActivity extends BaseActivity {
 
         }
         else {
+
             registerRecievers(0);
+
             if(!isWifiOn()){
 
                 mWifiManager.setWifiEnabled(true);
 
             }
+
+
 
         }
 
@@ -482,6 +500,8 @@ public class WifiConnectActivity extends BaseActivity {
                 if(isAppInDisconnectionMode)
                     return;
 
+                isScanning=false;
+
                 if (intent.getAction().equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
                     List<ScanResult> mScanResults = mWifiManager.getScanResults();
                     addLog("WIFI_", "WIFI STATE SCANNING  IS COMPLETED"  );
@@ -515,18 +535,80 @@ public class WifiConnectActivity extends BaseActivity {
 
                 ConnectivityManager conMan = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo netInfo = conMan.getActiveNetworkInfo();
+
+                bindNetwork();
+                if(netInfo==null)
+                {
+                    utl.e("WIFI_","NetInfo Is Null");
+                }
+                else {
+                    utl.e("WIFI_","NetType Is : "+netInfo.getTypeName()+" \n"+netInfo.getType()+"\nState : "+netInfo.getState());
+                }
                 if (netInfo != null && netInfo.getType() == ConnectivityManager.TYPE_WIFI)
                 {
+                    utl.l("WIFI_","Have Wifi Connection ,  BInding Now ");
+
                     isWifiConnectedAlready();
-                    Log.d("WIFI_", "Have Wifi Connection");
+                    bindNetwork();
+
+
+
                 }
                 else{
                     Log.d("WIFI_", "Don't have Wifi Connection");
-                    if(mWifiManager.getWifiState()==WifiManager.WIFI_STATE_ENABLED)
+                    if(mWifiManager.getWifiState()==WifiManager.WIFI_STATE_ENABLED&&!isScanning){
                         mWifiManager.startScan();
+                        isScanning=true;
+                    }
 
 
                 }
+
+            }
+        };
+
+
+
+        mWifiStateChangedReceiver=new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+
+
+                int extraWifiState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE ,
+                        WifiManager.WIFI_STATE_UNKNOWN);
+
+                switch(extraWifiState){
+                    case WifiManager.WIFI_STATE_DISABLED:
+                        utl.l("WIFI_","WIFI STATE DISABLED");
+                        break;
+                    case WifiManager.WIFI_STATE_DISABLING:
+                        utl.l("WIFI_","WIFI STATE DISABLING");
+                        break;
+                    case WifiManager.WIFI_STATE_ENABLED:
+
+                        utl.l("WIFI_","WIFI STATE ENABLED");
+
+                        if(utl.isWifiConnected(act)){
+
+                            utl.l("WIFI_","WIFI Connected ,  BInding Now ");
+
+                            isWifiConnectedAlready();
+                            bindNetwork();
+
+                        }
+
+
+                        break;
+                    case WifiManager.WIFI_STATE_ENABLING:
+                        utl.l("WIFI_","WIFI STATE ENABLING");
+                        break;
+                    case WifiManager.WIFI_STATE_UNKNOWN:
+                        utl.l("WIFI_","WIFI STATE UNKNOWN");
+                        break;
+                }
+
+
 
             }
         };
@@ -540,6 +622,7 @@ public class WifiConnectActivity extends BaseActivity {
 
             act.registerReceiver(mWifiScanReceiver,new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
             act.registerReceiver(mConnectedReciever,new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+            act.registerReceiver(mWifiStateChangedReceiver,new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
 
         } else if(n==I_WIFI_STATE_REC) {
             act.registerReceiver(mWifiStateChangedReceiver,new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
@@ -579,6 +662,7 @@ public class WifiConnectActivity extends BaseActivity {
     private void connect(String ssid,String key)
     {
 
+        utl.e("Connecting to Wifi : "+ssid+" : "+key) ;
         WifiConfiguration wifiConfig = new WifiConfiguration();
         wifiConfig.SSID = String.format("\"%s\"", ssid);
         wifiConfig.preSharedKey = String.format("\"%s\"", key);
@@ -597,12 +681,13 @@ public class WifiConnectActivity extends BaseActivity {
         addLog("Connected to Device");
         wifiActionIndicator.setImageResource(R.drawable.avd_coc);
 
-        String url=MONG_HOST_IP+"/rpc/read_water_flow";
+        String url=MONG_HOST_IP+"/rpc/read";
         addLog("WIFI_",url);
         JSONObject jo=new JSONObject();
         try {
+
             jo.put("api_key",API_KEY);
-            jo.put("sensor_id",10);
+            jo.put("read_id",10);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -619,7 +704,7 @@ public class WifiConnectActivity extends BaseActivity {
                                 "\n"+"Free RAM : "+response.getString("free_ram")+
                                 "\n"+"Uptime : "+response.getString("uptime")+
                                 "\n"+"Status : "+response.getString("status")+
-                                "\nSensor Data : "+response.getString("sensor_10");
+                                "\nSerial Data : "+response.getString("serial");
 
                         addLog("Device Connected\nSensor API Response\n" + re);
 
@@ -673,4 +758,43 @@ public class WifiConnectActivity extends BaseActivity {
     }
 
 
+    private void bindNetwork()
+    {
+
+            final ConnectivityManager cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+
+            NetworkRequest request = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                request = new NetworkRequest.Builder()
+                        .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+                        .build();
+
+            final ConnectivityManager.NetworkCallback callback = new ConnectivityManager.NetworkCallback(){
+
+                    @Override
+                    public void onAvailable (Network network){
+
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            utl.e(("WIFI_"),"Binding Network : Network Available : "+network.toString());
+                        }
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            cm.bindProcessToNetwork(network);      // M and above
+
+                        }
+                        // or:
+                       else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            cm.setProcessDefaultNetwork(network);  // L and above
+
+                        }
+
+
+                    }
+
+            };
+
+            cm.registerNetworkCallback(request, callback);
+        }
+    }
 }

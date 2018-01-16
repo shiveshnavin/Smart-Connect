@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -68,12 +69,13 @@ public class Splash extends BaseActivity {
         viewPagerContainer =findViewById(R.id.pager_container);
         viewPagerContainer.setVisibility(View.GONE);
 
+
         Handler h=new Handler();
         h.postDelayed(new Runnable() {
             @Override
             public void run() {
 
-                if(utl.getKey("firstinstall",ctx)==null|| showIntroTabs)
+                if(utl.getKey("firstinstall",ctx)==null&&false)
                 {
 
                     if (drawable instanceof Animatable) {
