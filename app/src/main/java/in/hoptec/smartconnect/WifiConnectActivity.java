@@ -473,6 +473,8 @@ public class WifiConnectActivity extends BaseActivity {
 
     private void isWifiConnectedAlready()
     {
+
+
         String currentWifiSSID = getCurrentNetwork();
         addLog("WIFI_","Connected to WIFI - "+ currentWifiSSID);
         if(currentWifiSSID.contains(AP_NAME))
@@ -500,7 +502,7 @@ public class WifiConnectActivity extends BaseActivity {
                 if(isAppInDisconnectionMode)
                     return;
 
-                isScanning=false;
+                //isScanning=false;
 
                 if (intent.getAction().equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
                     List<ScanResult> mScanResults = mWifiManager.getScanResults();
@@ -536,7 +538,7 @@ public class WifiConnectActivity extends BaseActivity {
                 ConnectivityManager conMan = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo netInfo = conMan.getActiveNetworkInfo();
 
-                bindNetwork();
+                //bindNetwork();
                 if(netInfo==null)
                 {
                     utl.e("WIFI_","NetInfo Is Null");
@@ -548,8 +550,8 @@ public class WifiConnectActivity extends BaseActivity {
                 {
                     utl.l("WIFI_","Have Wifi Connection ,  BInding Now ");
 
-                    isWifiConnectedAlready();
-                    bindNetwork();
+                    //isWifiConnectedAlready();
+                   // bindNetwork();
 
 
 
@@ -575,38 +577,22 @@ public class WifiConnectActivity extends BaseActivity {
 
 
 
-                int extraWifiState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE ,
-                        WifiManager.WIFI_STATE_UNKNOWN);
+                SupplicantState newState = intent.getParcelableExtra(WifiManager.EXTRA_NEW_STATE);
 
-                switch(extraWifiState){
-                    case WifiManager.WIFI_STATE_DISABLED:
-                        utl.l("WIFI_","WIFI STATE DISABLED");
+                switch(newState){
+                    case ASSOCIATED:
+                        Log.d("WIFI_", "CONNECTED and Binding");
+                        bindNetwork();
+                        isWifiConnectedAlready();
                         break;
-                    case WifiManager.WIFI_STATE_DISABLING:
-                        utl.l("WIFI_","WIFI STATE DISABLING");
-                        break;
-                    case WifiManager.WIFI_STATE_ENABLED:
-
-                        utl.l("WIFI_","WIFI STATE ENABLED");
-
-                        if(utl.isWifiConnected(act)){
-
-                            utl.l("WIFI_","WIFI Connected ,  BInding Now ");
-
-                            isWifiConnectedAlready();
-                            bindNetwork();
-
+                    case DISCONNECTED:
+                        if(!disconnected){
+                            Log.d("WIFI_", "DISCONNECTED");
+                            disconnected = true;
                         }
-
-
-                        break;
-                    case WifiManager.WIFI_STATE_ENABLING:
-                        utl.l("WIFI_","WIFI STATE ENABLING");
-                        break;
-                    case WifiManager.WIFI_STATE_UNKNOWN:
-                        utl.l("WIFI_","WIFI STATE UNKNOWN");
-                        break;
                 }
+
+
 
 
 
@@ -614,7 +600,7 @@ public class WifiConnectActivity extends BaseActivity {
         };
 
     }
-
+    boolean disconnected=false;
     private void registerRecievers(int n)
     {
 
@@ -622,7 +608,8 @@ public class WifiConnectActivity extends BaseActivity {
 
             act.registerReceiver(mWifiScanReceiver,new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
             act.registerReceiver(mConnectedReciever,new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-            act.registerReceiver(mWifiStateChangedReceiver,new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
+            //act.registerReceiver(mWifiStateChangedReceiver,new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
+            act.registerReceiver(mWifiStateChangedReceiver,new IntentFilter(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION));
 
         } else if(n==I_WIFI_STATE_REC) {
             act.registerReceiver(mWifiStateChangedReceiver,new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
