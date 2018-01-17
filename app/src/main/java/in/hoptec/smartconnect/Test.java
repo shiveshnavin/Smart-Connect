@@ -69,7 +69,7 @@ public class Test extends AppCompatActivity {
                     break;
                 case DISCONNECTED:
 
-                        tx.setText("Disconnedted !");
+                        tx.setText("Connecting... !");
                         Log.d("WIFI_", "DISCONNECTED");
                         scanDone=false;
                         scanInitiatedByApp=true;
