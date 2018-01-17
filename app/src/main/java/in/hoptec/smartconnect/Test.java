@@ -854,6 +854,10 @@ public class Test extends AppCompatActivity {
             }
         } else {
 
+
+            utl.e("EMPTY Serial Data");
+
+
         }
         logTextView.setText("Device Connected\nSensor API Response\n" + re);
 
