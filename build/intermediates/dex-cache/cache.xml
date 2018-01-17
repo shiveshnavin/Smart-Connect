@@ -52,7 +52,7 @@
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
-        sha1="c3b59bfb4538f43abee3978fd0fcbfa2fd567545">
+        sha1="3c1846d17f4ca51c946dff48410138e9ec96a100">
         <dex dex="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_0237841b0f50edb114c91081d8e5dc5563e38108/classes.dex" />
     </item>
     <item
@@ -142,7 +142,7 @@
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
-        sha1="1c89a456c7b9af8ab84ee834042e2cf22891251f">
+        sha1="7d34abec54684c847d19d894be92783338e53ef1">
         <dex dex="/home/shivesh/AndroidStudioProjects/SmartConnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_e8bf401eee581475f41fc284db35db59196f26dc/classes.dex" />
     </item>
     <item

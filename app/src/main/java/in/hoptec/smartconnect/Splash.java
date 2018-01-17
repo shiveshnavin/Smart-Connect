@@ -280,7 +280,7 @@ public class Splash extends BaseActivity {
 
         if (permissionOK&&!alreadyLaunched) {
             alreadyLaunched=true;
-            Intent intent=new Intent(ctx, WifiConnectActivity.class);
+            Intent intent=new Intent(ctx, Test.class);
             startActivity(intent);
             finish();
         }

@@ -608,7 +608,7 @@ public class WifiConnectActivity extends BaseActivity {
 
             act.registerReceiver(mWifiScanReceiver,new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
             act.registerReceiver(mConnectedReciever,new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-            //act.registerReceiver(mWifiStateChangedReceiver,new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
+            //act.registerReceiver(suppliantChangeReciever,new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
             act.registerReceiver(mWifiStateChangedReceiver,new IntentFilter(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION));
 
         } else if(n==I_WIFI_STATE_REC) {
