@@ -41,7 +41,7 @@
             android:textColor="@color/colorAccent"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="LOG"
+            android:text="STATUS"
             android:textSize="15sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -61,11 +61,10 @@
                     app:font="Avenir-Medium"
                     android:id="@+id/logs"
                     android:layout_below="@+id/vv"
-
                     android:padding="15dp"
                     android:textColor="@color/grey_600"
-                    android:layout_gravity="left"
-                    android:gravity="left"
+                    android:layout_gravity="center"
+                    android:gravity="center"
                     android:text="[START]"
                     android:textSize="15sp"
                     android:layout_width="match_parent"

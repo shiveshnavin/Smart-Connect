@@ -66,7 +66,6 @@ public class WifiConnectActivity extends BaseActivity {
     private LinearLayout connectButton;
     private LinearLayout refreshButton;
 
-
     private ImageView logo;
     private DrawerLayout drawerLayout;
     private AppBarLayout appBarLayout;
@@ -79,7 +78,6 @@ public class WifiConnectActivity extends BaseActivity {
     private Activity act;
 
     private int appBarHeight=200;
-
     private long FAB_ANIM_DUR=400;
     private boolean LOG_UP=false;
 
