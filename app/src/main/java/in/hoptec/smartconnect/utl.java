@@ -688,11 +688,13 @@ public class utl {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
+
                 click.done(dialogInterface);
 
             }
         });
 
+        alertDialogBuilder.setCancelable(false);
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }

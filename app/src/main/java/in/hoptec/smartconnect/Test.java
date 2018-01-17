@@ -3,6 +3,7 @@ package in.hoptec.smartconnect;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
@@ -20,6 +21,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import in.hoptec.smartconnect.utils.ApManager;
+
 public class Test extends AppCompatActivity {
 
 
@@ -31,6 +34,11 @@ public class Test extends AppCompatActivity {
 
     private boolean scanDone =false;
     private boolean scanInitiatedByApp =false;
+
+    private boolean isAppInDisconnectionMode=false;
+
+
+    private Context ctx;
 
 
     BroadcastReceiver suppliantChangeReciever =new BroadcastReceiver() {
@@ -156,6 +164,13 @@ public class Test extends AppCompatActivity {
 
             }
             else{
+                utl.l("WIFI_","Dont Have Wifi Connection  ");
+
+                tx.setText("Disconnedted !");
+                Log.d("WIFI_", "DISCONNECTED");
+                scanDone=false;
+                scanInitiatedByApp=true;
+                mWifiManager.startScan();
 
 
 
@@ -213,6 +228,8 @@ public class Test extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ctx=this;
         act=this;
 
         setContentView(R.layout.activity_test);
@@ -220,33 +237,12 @@ public class Test extends AppCompatActivity {
         tx=(TextView) findViewById(R.id.st);
         mWifiManager = (WifiManager) act.getSystemService(WIFI_SERVICE);
 
-
-
-
-
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
-            act.registerReceiver(suppliantChangeReciever, new IntentFilter(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION));
-        }
-        else {
-
-            act.registerReceiver(mConnectedReciever,new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-
-        }
-        act.registerReceiver(mWifiStateChangedReceiver,new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
-        act.registerReceiver(mWifiScanReceiver,new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+        startConnection();
 
 
 
 
 
-    }
-
-    @Override
-    protected void onPostResume() {
-
-
-        super.onPostResume();
     }
 
     private boolean checkWifiOnAndConnected() {
@@ -266,28 +262,24 @@ public class Test extends AppCompatActivity {
         }
     }
 
+
+
     @Override
     protected void onDestroy() {
 
+        try{
 
+            unRegister();
 
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
-            act.unregisterReceiver(suppliantChangeReciever);
+        }catch (Exception e)
+        {
+            e.printStackTrace();
         }
-        else {
-
-            act.unregisterReceiver(mConnectedReciever);
-
-        }
-
-        act.unregisterReceiver(mWifiScanReceiver);
-        act.unregisterReceiver(mWifiStateChangedReceiver);
 
         super.onDestroy();
     }
 
-    boolean connectingStart =false;
+
 
     private void connect(String ssid,String key)
     {
@@ -305,7 +297,68 @@ public class Test extends AppCompatActivity {
     }
 
 
+    private void startConnection() {
 
+        if (isAppInDisconnectionMode) {
+            return;
+        }
+
+
+        if(ApManager.isApOn(ctx))
+        {
+            utl.diag(ctx, "Hotspot On !", "Please turn OFF the WiFi hotspot and click OK to continue !", "TURNED OFF", new utl.ClickCallBack() {
+                @Override
+                public void done(DialogInterface dialogInterface) {
+                    startConnection();
+                }
+            });
+
+            return;
+
+        }
+        register();
+
+    }
+
+
+    private void register()
+    {
+
+
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+            act.registerReceiver(suppliantChangeReciever, new IntentFilter(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION));
+        }
+        else {
+
+            act.registerReceiver(mConnectedReciever,new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+
+        }
+        act.registerReceiver(mWifiStateChangedReceiver,new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
+        act.registerReceiver(mWifiScanReceiver,new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+
+
+    }
+
+    private void unRegister()
+    {
+
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+            act.unregisterReceiver(suppliantChangeReciever);
+        }
+        else {
+
+            act.unregisterReceiver(mConnectedReciever);
+
+        }
+
+        act.unregisterReceiver(mWifiScanReceiver);
+        act.unregisterReceiver(mWifiStateChangedReceiver);
+
+    }
     private void addLog(String log)
     {
 
