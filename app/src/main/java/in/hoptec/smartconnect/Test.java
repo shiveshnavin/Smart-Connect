@@ -73,14 +73,14 @@ public class Test extends AppCompatActivity {
 
 
     /******UI VARS******/
-    private TextView logTextView;
+    private TextView logTextView,tds_in,tds_out,wf,pw,tf,pm,tf_ic;
     private CoordinatorLayout coordinatorLayout;
     private ImageView wifiActionIndicator;
     private LinearLayout disconnectButton;
     private LinearLayout connectButton;
     private LinearLayout refreshButton;
 
-    private ImageView logo;
+    private ImageView logo,wf_ic,pw_ic,pm_ic;
     private DrawerLayout drawerLayout;
     private AppBarLayout appBarLayout;
     private LinearLayout header;
@@ -94,6 +94,7 @@ public class Test extends AppCompatActivity {
     private int appBarHeight=200;
     private long FAB_ANIM_DUR=400;
     private boolean LOG_UP=false;
+
 
 
     @Override
@@ -120,6 +121,18 @@ public class Test extends AppCompatActivity {
         disconnectButton=(LinearLayout)findViewById(R.id.disconnect);
         connectButton=(LinearLayout)findViewById(R.id.connect);
         refreshButton=(LinearLayout)findViewById(R.id.refresh);
+
+        tds_in=(TextView) findViewById(R.id.tds_in);
+        tds_out=(TextView) findViewById(R.id.tds_out);
+        wf=(TextView) findViewById(R.id.wf);
+        pw=(TextView) findViewById(R.id.pw);
+        tf=(TextView) findViewById(R.id.tf);
+        pm=(TextView) findViewById(R.id.pm);
+        tf_ic=(TextView) findViewById(R.id.tf_ic);
+
+        pw_ic=(ImageView) findViewById(R.id.pw_ic);
+        wf_ic=(ImageView) findViewById(R.id.wf_ic);
+        pm_ic=(ImageView) findViewById(R.id.pm_ic);
 
 
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -852,6 +865,40 @@ public class Test extends AppCompatActivity {
             {
                 re=re+"\nSensor "+i+" Val : "+data[i];
             }
+
+
+            tds_in.setText(data[0]);
+            tds_out.setText(data[1]);
+
+            if(data[3].equals("0000"))
+            {
+
+                pw_ic.setImageResource(R.drawable.vd_power_on);
+
+            }
+            else {
+                pw_ic.setImageResource(R.drawable.vd_power_off);
+
+            }
+
+            if(!data[4].equals("0000"))
+            {
+                isWaterFlowing=true;
+            }
+
+
+            if(!data[5].equals("0000"))
+            {
+                isPumpOn=true;
+            }
+
+
+            tf_ic.setText(Integer.parseInt(data[7])+" L");
+
+
+
+
+
         } else {
 
 
@@ -862,7 +909,35 @@ public class Test extends AppCompatActivity {
         logTextView.setText("Device Connected\nSensor API Response\n" + re);
 
 
+
+
+        animHandler.postDelayed(anim,700);
+
+
+
+
+
+
+
+
     }
+    Runnable anim=new Runnable() {
+        @Override
+        public void run() {
+
+            if(isPumpOn)
+                utl.animate_avd(pm_ic);
+            if(isWaterFlowing)
+                utl.animate_avd(wf_ic);
+
+            if(animate)
+                animHandler.postDelayed(anim,700);
+
+        }
+    };
+
+    boolean isWaterFlowing=false,isPumpOn=false,animate=true;
+    Handler animHandler=new Handler();
 
 
 }

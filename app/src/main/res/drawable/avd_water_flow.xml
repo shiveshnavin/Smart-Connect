@@ -49,6 +49,7 @@
     <target android:name="drop0">
         <aapt:attr name="android:animation">
             <objectAnimator
+                android:repeatCount="infinite"
                 android:propertyName="translateY"
                 android:duration="300"
                 android:valueFrom="-30"
@@ -60,6 +61,7 @@
     <target android:name="drop1">
         <aapt:attr name="android:animation">
             <objectAnimator
+                android:repeatCount="infinite"
                 android:propertyName="translateY"
                 android:startOffset="50"
                 android:duration="350"
@@ -72,6 +74,7 @@
     <target android:name="path_1">
         <aapt:attr name="android:animation">
             <objectAnimator
+                android:repeatCount="infinite"
                 android:propertyName="fillAlpha"
                 android:startOffset="49"
                 android:duration="1"
@@ -84,6 +87,7 @@
     <target android:name="drop3">
         <aapt:attr name="android:animation">
             <objectAnimator
+                android:repeatCount="infinite"
                 android:propertyName="translateY"
                 android:duration="500"
                 android:valueFrom="-20"
