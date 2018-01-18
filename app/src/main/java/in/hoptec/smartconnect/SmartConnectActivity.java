@@ -56,7 +56,7 @@ public class SmartConnectActivity extends AppCompatActivity {
     /******WIFI CONNECTION VARS******/
 
     private String MONG_HOST_IP = "http://192.168.1.101";
-    private String AP_NAME = "JioFi2_00C3E7";
+    private String AP_NAME = "JioFi2_001C3E7";
     private String AP_PASS = "ytf47mnfjn";
     private String API_KEY = "AEZAKMI";
 
@@ -184,6 +184,101 @@ public class SmartConnectActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+
+        try {
+
+            unRegister();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        super.onDestroy();
+    }
+
+    private void startConnection() {
+
+        if (isAppInDisconnectionMode) {
+            return;
+        }
+
+        onStateDisConnected();
+
+        if (ApManager.isApOn(ctx)) {
+            utl.diag(ctx, "Hotspot On !", "Please turn OFF the WiFi hotspot and click OK to continue !", "TURNED OFF", new utl.ClickCallBack() {
+                @Override
+                public void done(DialogInterface dialogInterface) {
+                    startConnection();
+                }
+            });
+
+            return;
+
+        }
+        register();
+
+    }
+
+    private void getWaterFlowData() {
+
+
+
+        addLog("Connected to Device");
+
+
+        String url = MONG_HOST_IP + "/rpc/read";
+        addLog("WIFI_", url);
+        JSONObject jo = new JSONObject();
+        try {
+
+            jo.put("api_key", API_KEY);
+            jo.put("read_id", 10);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        AndroidNetworking.post(url).addJSONObjectBody(jo).build().getAsJSONObject(new JSONObjectRequestListener() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                onStateConnected();
+
+                addLog("WIFI_", "Respose : " + response.toString());
+
+
+                if (response.toString().toLowerCase().contains("success")) {
+                    try {
+
+                        parse(response);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+
+                    addLog("Device Connected\nSensor API Response\n" + response.toString());
+                }
+
+            }
+
+            @Override
+            public void onError(ANError ANError) {
+
+
+
+                try {
+                    parse(null);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                addLog("Err err:" + ANError.getErrorDetail());
+                addLog("Err Body:" + ANError.getErrorBody());
+            }
+        });
+
+    }
 
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
@@ -224,7 +319,6 @@ public class SmartConnectActivity extends AppCompatActivity {
 
 
     }
-
 
     private void initOnCLickListeners()
     {
@@ -286,7 +380,6 @@ public class SmartConnectActivity extends AppCompatActivity {
 
 
     }
-
 
     private void expandToolbar()
     {
@@ -511,6 +604,7 @@ public class SmartConnectActivity extends AppCompatActivity {
 
                     mWifiManager.disconnect();
                 } else {
+                    getWaterFlowData();
                     onStateConnected();
 
                 }
@@ -593,23 +687,6 @@ public class SmartConnectActivity extends AppCompatActivity {
         }
     }
 
-
-    @Override
-    protected void onDestroy() {
-
-        try {
-
-            unRegister();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        super.onDestroy();
-    }
-
-
-
     private void reset()
     {
 
@@ -676,31 +753,6 @@ public class SmartConnectActivity extends AppCompatActivity {
 
     }
 
-
-    private void startConnection() {
-
-        if (isAppInDisconnectionMode) {
-            return;
-        }
-
-        onStateDisConnected();
-
-        if (ApManager.isApOn(ctx)) {
-            utl.diag(ctx, "Hotspot On !", "Please turn OFF the WiFi hotspot and click OK to continue !", "TURNED OFF", new utl.ClickCallBack() {
-                @Override
-                public void done(DialogInterface dialogInterface) {
-                    startConnection();
-                }
-            });
-
-            return;
-
-        }
-        register();
-
-    }
-
-
     private void register() {
 
 
@@ -753,7 +805,6 @@ public class SmartConnectActivity extends AppCompatActivity {
 
     }
 
-
     private String getCurrentNetwork() {
         String ssid = "";
         WifiInfo wifiInfo;
@@ -765,7 +816,6 @@ public class SmartConnectActivity extends AppCompatActivity {
         return ssid;
 
     }
-
 
     private void bindNetwork() {
 
@@ -820,7 +870,7 @@ public class SmartConnectActivity extends AppCompatActivity {
 
 
 
-                    utl.e("WIFI_","Wifi IP Add is "+GetDeviceipWiFiData());
+                    utl.e("WIFI_","Wifi IP Add is "+ getDeviceipWiFiData());
                 }
 
             };
@@ -830,9 +880,7 @@ public class SmartConnectActivity extends AppCompatActivity {
 
     }
 
-
-
-    public String GetDeviceipWiFiData()
+    public String getDeviceipWiFiData()
     {
 
         WifiManager wm = (WifiManager) getSystemService(WIFI_SERVICE);
@@ -845,68 +893,6 @@ public class SmartConnectActivity extends AppCompatActivity {
 
     }
 
-    private void getWaterFlowData() {
-
-
-
-        addLog("Connected to Device");
-
-
-        String url = MONG_HOST_IP + "/rpc/read";
-        addLog("WIFI_", url);
-        JSONObject jo = new JSONObject();
-        try {
-
-            jo.put("api_key", API_KEY);
-            jo.put("read_id", 10);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        AndroidNetworking.post(url).addJSONObjectBody(jo).build().getAsJSONObject(new JSONObjectRequestListener() {
-            @Override
-            public void onResponse(JSONObject response) {
-
-                onStateConnected();
-
-                addLog("WIFI_", "Respose : " + response.toString());
-
-
-                if (response.toString().toLowerCase().contains("success")) {
-                    try {
-
-                        parse(response);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else {
-
-                    addLog("Device Connected\nSensor API Response\n" + response.toString());
-                }
-
-            }
-
-            @Override
-            public void onError(ANError ANError) {
-
-
-
-                try {
-                    parse(null);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                addLog("Err err:" + ANError.getErrorDetail());
-                addLog("Err Body:" + ANError.getErrorBody());
-            }
-        });
-
-    }
-
-
-
-    int noRetries=0;
     private void parse(JSONObject response) throws Exception
     {
         if(response==null)
@@ -1011,13 +997,11 @@ public class SmartConnectActivity extends AppCompatActivity {
 
     }
 
-
     private void onStateConnected()
     {
         logTextView.setText("Connected !");
         wifiActionIndicator.setImageResource(R.drawable.avd_coc);
     }
-
 
     private void onStateDisConnected()
     {
