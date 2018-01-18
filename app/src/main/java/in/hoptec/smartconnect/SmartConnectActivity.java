@@ -56,17 +56,13 @@ public class SmartConnectActivity extends AppCompatActivity {
     /******WIFI CONNECTION VARS******/
 
     private String MONG_HOST_IP = "http://192.168.1.101";
-    private String AP_NAME = "JioFi2_001C3E7";
+    private String AP_NAME = "JioFi2_00C3E7";
     private String AP_PASS = "ytf47mnfjn";
     private String API_KEY = "AEZAKMI";
 
     private boolean scanDone = false;
     private boolean scanInitiatedByApp = false;
-
     private boolean isAppInDisconnectionMode = false;
-
-
-
     private boolean connected = false;
     private WifiManager mWifiManager;
 
@@ -176,8 +172,6 @@ public class SmartConnectActivity extends AppCompatActivity {
         initNavigationDrawer();;
         expandToolbar();
         initOnCLickListeners();
-
-
 
         startConnection();
 
@@ -555,12 +549,12 @@ public class SmartConnectActivity extends AppCompatActivity {
                     utl.l("WIFI_", "WIFI STATE DISABLING");
                     break;
                 case WifiManager.WIFI_STATE_ENABLED:
-                    if (!scanDone) {
 
                         scanInitiatedByApp = true;
                         mWifiManager.startScan();
 
-                    }
+                        if (!scanDone) {
+                        }
                     utl.l("WIFI_", "WIFI STATE ENABLED");
 
                     break;
@@ -657,9 +651,12 @@ public class SmartConnectActivity extends AppCompatActivity {
 
                 if (ssids.contains(AP_NAME))
                     connect(AP_NAME, AP_PASS);
-                else
+                else{
+                    isAppInDisconnectionMode=true;
                     logTextView.setText("Device Not in Range ! \nPlease Make Sure Device is turned on and " +
                             "is in Range and Pull Down to refresh .");
+
+                }
 
 
             }
