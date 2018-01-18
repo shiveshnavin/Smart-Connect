@@ -12,13 +12,11 @@ import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -280,7 +278,7 @@ public class Splash extends BaseActivity {
 
         if (permissionOK&&!alreadyLaunched) {
             alreadyLaunched=true;
-            Intent intent=new Intent(ctx, Test.class);
+            Intent intent=new Intent(ctx, SmartConnectActivity.class);
             startActivity(intent);
             finish();
         }

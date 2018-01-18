@@ -110,6 +110,23 @@ public class utl {
 
     }
 
+    public static void animate_avd_stop(ImageView img)
+    {
+
+        try {
+            final Drawable drawable = img.getDrawable();
+
+            if (drawable instanceof Animatable) {
+                ((Animatable) drawable).stop();
+            }
+        } catch (Exception e) {
+
+            utl.e("ERROR WHILE ANIMATING IMAGEVIEW");
+        }
+
+
+    }
+
     public static void animate(View app, String property, int initv, int finalv, boolean repeat, int dur)
     {
 

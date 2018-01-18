@@ -2,8 +2,6 @@ package in.hoptec.smartconnect.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Animatable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
@@ -16,9 +14,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
- import in.hoptec.smartconnect.WifiConnectActivity;
-import in.hoptec.smartconnect.R;
+ import in.hoptec.smartconnect.R;
 import in.hoptec.smartconnect.Splash;
+import in.hoptec.smartconnect.SmartConnectActivity;
 import in.hoptec.smartconnect.utl;
 
 /**
@@ -81,7 +79,7 @@ public class HelpTabFragment extends Fragment {
                     Splash.pager.setCurrentItem(Splash.curItem+1,true);
                 }
                 if(islast) {
-                    Intent intent = new Intent(getContext(), WifiConnectActivity.class);
+                    Intent intent = new Intent(getContext(), SmartConnectActivity.class);
                     startActivity(intent);
                 }
 

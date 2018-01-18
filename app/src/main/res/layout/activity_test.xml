@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:background="@color/red_300"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="in.hoptec.smartconnect.Test">
+    tools:context="in.hoptec.smartconnect.SmartConnectActivity">
 
     <TextView
         android:layout_centerInParent="true"

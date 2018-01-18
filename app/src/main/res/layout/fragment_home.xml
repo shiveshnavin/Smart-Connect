@@ -47,27 +47,12 @@
 />
 
 
-                <com.daniribalbert.customfontlib.views.CustomFontTextView
-                    app:font="Avenir-Medium"
-                    android:visibility="gone"
-                    android:id="@+id/logs"
-                    android:layout_below="@+id/vv"
-                    android:padding="15dp"
-                    android:textColor="@color/grey_600"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="[START]"
-                    android:textSize="15sp"
-
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
 
 
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_below="@+id/logs"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -410,6 +395,20 @@
 
 
 
+
+            <com.daniribalbert.customfontlib.views.CustomFontTextView
+                app:font="Avenir-Medium"
+                 android:id="@+id/logs"
+                android:layout_below="@+id/vv"
+                android:padding="15dp"
+                android:textColor="@color/grey_600"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="[START]"
+                android:textSize="15sp"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
 
 
