@@ -54,7 +54,6 @@ import in.hoptec.smartconnect.utils.ApManager;
 public class SmartConnectActivity extends AppCompatActivity {
 
     /******WIFI CONNECTION VARS******/
-
     private String MONG_HOST_IP = "http://192.168.4.1";
 /*    private String AP_NAME = "JioFi2_00C3E7";
     private String AP_PASS = "ytf47mnfjn";*/
@@ -345,12 +344,10 @@ public class SmartConnectActivity extends AppCompatActivity {
                 refresh();
             }
         });
+
         addPressReleaseAnimation(refreshButton);
-
-
         addPressReleaseAnimation(fabConnect);
         addPressReleaseAnimation(fabDisconnect);
-
 
         fabConnect.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -398,6 +395,7 @@ public class SmartConnectActivity extends AppCompatActivity {
 
                 logo=(ImageView)navigationView.getHeaderView(0).findViewById(R.id.logo);
                 logo.setVisibility(View.INVISIBLE);
+
             }
         },400);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -855,7 +853,6 @@ public class SmartConnectActivity extends AppCompatActivity {
                         }
                     },5000);
 
-
                     animHandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -865,10 +862,7 @@ public class SmartConnectActivity extends AppCompatActivity {
                         }
                     },10000);
 
-                            getWaterFlowData();
-
-
-
+                    getWaterFlowData();
                     utl.e("WIFI_","Wifi IP Add is "+ getDeviceipWiFiData());
                 }
 

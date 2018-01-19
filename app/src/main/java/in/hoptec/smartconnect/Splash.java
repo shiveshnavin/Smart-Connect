@@ -90,10 +90,6 @@ public class Splash extends BaseActivity {
 
                     viewPagerContainer.startAnimation(animation);
 
-
-
-
-
                     setUpIntro();
 
                 }
