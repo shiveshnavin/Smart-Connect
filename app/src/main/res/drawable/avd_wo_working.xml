@@ -52,6 +52,8 @@
     <target android:name="in">
         <aapt:attr name="android:animation">
             <objectAnimator
+
+                android:repeatCount="infinite"
                 android:propertyName="translateY"
                 android:duration="300"
                 android:valueFrom="0"
@@ -63,6 +65,7 @@
     <target android:name="out">
         <aapt:attr name="android:animation">
             <objectAnimator
+                android:repeatCount="infinite"
                 android:propertyName="translateY"
                 android:duration="300"
                 android:valueFrom="0"
@@ -74,6 +77,8 @@
     <target android:name="drg">
         <aapt:attr name="android:animation">
             <objectAnimator
+                android:repeatCount="infinite"
+
                 android:propertyName="translateY"
                 android:duration="300"
                 android:valueFrom="650"
@@ -85,6 +90,7 @@
     <target android:name="drg2">
         <aapt:attr name="android:animation">
             <objectAnimator
+                android:repeatCount="infinite"
                 android:propertyName="translateY"
                 android:startOffset="100"
                 android:duration="200"

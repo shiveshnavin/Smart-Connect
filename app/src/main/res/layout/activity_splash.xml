@@ -24,12 +24,13 @@
         android:orientation="vertical" >
 
         <LinearLayout
+
             android:id="@+id/title_cont"
             android:gravity="center"
             android:layout_gravity="center"
             android:layout_weight="1.2"
             android:layout_width="match_parent"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_height="0dp"
             >
 
@@ -54,19 +55,18 @@
 
                     android:padding="20dp"
                     android:id="@+id/logo"
-                    android:layout_width="110dp"
-                    android:src="@drawable/avd_logo"
+                    android:layout_width="150dp"
+                    android:src="@drawable/avd_wo_working"
                     android:layout_gravity="center"
-                    android:layout_height="match_parent" />
+                    android:layout_height="150dp" />
 
 
                 <ImageView
                     android:src="@drawable/avd_app_n_2"
-
                     android:id="@+id/app_n"
                     android:layout_width="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_height="match_parent" />
+                    android:layout_height="wrap_content" />
 
 
 

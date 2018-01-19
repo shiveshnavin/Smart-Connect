@@ -42,8 +42,8 @@ public class Splash extends BaseActivity {
 
     private Integer dur=1000;
     public static  HelpPagerAdapter pageAdapter;
-    private String curBGColor ="#ffff5252";
-    private String  colorsS [] ={"#ffc53929","#ff0b8043","#ff3367d6"};
+    private String curBGColor ="#ffffff";
+    private String  colorsS [] ={"#ffffff","#ff0b8043","#ff3367d6"};
 
     private boolean permissionOK=false;
 
@@ -100,7 +100,8 @@ public class Splash extends BaseActivity {
                 else if(permissionOK) {
 
 
-                    launch();
+
+                     launch();
 
 
                 }

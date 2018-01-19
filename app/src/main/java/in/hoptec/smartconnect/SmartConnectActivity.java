@@ -55,9 +55,11 @@ public class SmartConnectActivity extends AppCompatActivity {
 
     /******WIFI CONNECTION VARS******/
 
-    private String MONG_HOST_IP = "http://192.168.1.101";
-    private String AP_NAME = "JioFi2_00C3E7";
-    private String AP_PASS = "ytf47mnfjn";
+    private String MONG_HOST_IP = "http://192.168.4.1";
+/*    private String AP_NAME = "JioFi2_00C3E7";
+    private String AP_PASS = "ytf47mnfjn";*/
+    private String AP_NAME = "MONG_TEST";
+    private String AP_PASS = "password";
     private String API_KEY = "AEZAKMI";
 
     private boolean scanDone = false;
@@ -654,7 +656,7 @@ public class SmartConnectActivity extends AppCompatActivity {
                 else{
                     isAppInDisconnectionMode=true;
                     logTextView.setText("Device Not in Range ! \nPlease Make Sure Device is turned on and " +
-                            "is in Range and Pull Down to refresh .");
+                            "is in Range and refresh .");
 
                 }
 
@@ -897,17 +899,11 @@ public class SmartConnectActivity extends AppCompatActivity {
 
             tdsIn.setText("----");
             tdsOut.setText("----");
-
-                powerIcon.setImageResource(R.drawable.vd_power_off);
-
-
+            powerIcon.setImageResource(R.drawable.vd_power_off);
             utl.animate_avd_stop(waterFlowIcon);
-                isWaterFlowing=false;
-
-                isPumpOn=false;
+            isWaterFlowing=false;
+            isPumpOn=false;
             animate=false;
-
-
             totalFlowValue.setText("-- L");
 
 
@@ -1010,7 +1006,6 @@ public class SmartConnectActivity extends AppCompatActivity {
         }
 
         logTextView.setText("Disconnected !");
-
         wifiActionIndicator.setImageResource(R.drawable.avd_conn);
         utl.animate_avd(wifiActionIndicator);
 
