@@ -218,10 +218,7 @@ public class SmartConnectActivity extends AppCompatActivity {
 
     private void getWaterFlowData() {
 
-
-
         addLog("Connected to Device");
-
 
         String url = MONG_HOST_IP + "/rpc/read";
         addLog("WIFI_", url);
@@ -487,7 +484,9 @@ public class SmartConnectActivity extends AppCompatActivity {
                     } else {
 
                         connected = true;
+
                         //bindNetwork();
+
                         Log.d("WIFI_", "CONNECTED and Binding");
                         logTextView.setText("Connected !");
 
@@ -727,15 +726,36 @@ public class SmartConnectActivity extends AppCompatActivity {
 
     private void disconnect()
     {
+
+        isAppInDisconnectionMode =true;
+
+
         connected=false;
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            cm.bindProcessToNetwork(null);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            cm.setProcessDefaultNetwork(null);
+        }
+
+        mWifiManager.disconnect();
+
+
+
+         WifiManager wifiManager = (WifiManager)getSystemService(WIFI_SERVICE);
+
+        wifiManager.removeNetwork(netId);
+
+        utl.e("WIFI_","Removing Net Id : "+netId);
+
         onStateDisConnected();
-        isAppInDisconnectionMode =true;
         utl.snack(coordinatorLayout,"Disconnecting !");
         unRegister();
-         mWifiManager.disconnect();
      }
 
+    int netId=-1;
     private void connect(String ssid, String key) {
 
         utl.e("Connecting to Wifi : " + ssid + " : " + key);
@@ -743,7 +763,7 @@ public class SmartConnectActivity extends AppCompatActivity {
         wifiConfig.SSID = String.format("\"%s\"", ssid);
         wifiConfig.preSharedKey = String.format("\"%s\"", key);
 
-        int netId = mWifiManager.addNetwork(wifiConfig);
+        netId = mWifiManager.addNetwork(wifiConfig);
         //mWifiManager.disconnect();
         mWifiManager.enableNetwork(netId, true);
         mWifiManager.reconnect();
@@ -814,9 +834,10 @@ public class SmartConnectActivity extends AppCompatActivity {
 
     }
 
+    ConnectivityManager cm;
     private void bindNetwork() {
 
-        final ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+       cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkRequest request = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
@@ -824,7 +845,7 @@ public class SmartConnectActivity extends AppCompatActivity {
                     .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
                     .build();
 
-            final ConnectivityManager.NetworkCallback callback = new ConnectivityManager.NetworkCallback() {
+              ConnectivityManager.NetworkCallback callback = new ConnectivityManager.NetworkCallback() {
 
                 @Override
                 public void onAvailable(Network network) {
