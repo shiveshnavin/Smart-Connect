@@ -18,6 +18,7 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -145,6 +146,28 @@ public class SmartConnectActivity extends AppCompatActivity {
         powerIcon =(ImageView) findViewById(R.id.pw_ic);
         waterFlowIcon =(ImageView) findViewById(R.id.wf_ic);
         pumpIcon =(ImageView) findViewById(R.id.pm_ic);
+
+
+        String emulatedResp=getIntent().getStringExtra("emulatedResp");
+
+        if(emulatedResp!=null)
+        {
+            isAppInDisconnectionMode=true;
+            utl.e("APP IN TESTING MODE");
+            try{
+
+                parse(new JSONObject(emulatedResp));
+
+
+            }catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+
+
+
 
         mWifiManager = (WifiManager) act.getSystemService(WIFI_SERVICE);
 
@@ -906,6 +929,7 @@ public class SmartConnectActivity extends AppCompatActivity {
         return ip;
 
     }
+
 
     public void parse(JSONObject response) throws Exception
     {
