@@ -63,7 +63,7 @@ public class SmartConnectActivity extends AppCompatActivity {
 
     private boolean scanDone = false;
     private boolean scanInitiatedByApp = false;
-    private boolean isAppInDisconnectionMode = false;
+    public boolean isAppInDisconnectionMode = false;
     private boolean connected = false;
     private WifiManager mWifiManager;
 
@@ -907,7 +907,7 @@ public class SmartConnectActivity extends AppCompatActivity {
 
     }
 
-    private void parse(JSONObject response) throws Exception
+    public void parse(JSONObject response) throws Exception
     {
         if(response==null)
         {
