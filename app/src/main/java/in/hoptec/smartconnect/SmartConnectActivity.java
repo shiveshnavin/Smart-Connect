@@ -149,14 +149,15 @@ public class SmartConnectActivity extends AppCompatActivity {
 
 
         String emulatedResp=getIntent().getStringExtra("emulatedResp");
+        int testMode=getIntent().getIntExtra("testMode",0);
 
-        if(emulatedResp!=null)
+        if(testMode==1)
         {
             isAppInDisconnectionMode=true;
-            utl.e("APP IN TESTING MODE");
+            utl.e("TEST","APP IN TESTING MODE emulatedResp = "+emulatedResp);
             try{
 
-                parse(new JSONObject(emulatedResp));
+                parse(emulatedResp);
 
 
             }catch (Exception e)
@@ -266,7 +267,7 @@ public class SmartConnectActivity extends AppCompatActivity {
                 if (response.toString().toLowerCase().contains("success")) {
                     try {
 
-                        parse(response);
+                        parse(response.toString());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -931,9 +932,16 @@ public class SmartConnectActivity extends AppCompatActivity {
     }
 
 
-    public void parse(JSONObject response) throws Exception
+    public void parse(String  res) throws Exception
     {
-        if(response==null)
+        JSONObject jsonObject=null;
+        try{
+            jsonObject=new JSONObject(res);
+        }catch (Exception e)
+        {
+
+        }
+        if(jsonObject==null)
         {
 
             tdsIn.setText("----");
@@ -950,11 +958,11 @@ public class SmartConnectActivity extends AppCompatActivity {
         }
 
         String re = "_____\n" +
-                "\n" + "Free RAM : " + response.getString("free_ram") +
-                "\n" + "Uptime : " + response.getString("uptime") +
-                "\n" + "Status : " + response.getString("status") +
+                "\n" + "Free RAM : " + jsonObject.getString("free_ram") +
+                "\n" + "Uptime : " + jsonObject.getString("uptime") +
+                "\n" + "Status : " + jsonObject.getString("status") +
                 "\nSensor Data : ";
-        String rx= response.getString("serial");
+        String rx= jsonObject.getString("serial");
 
         if (rx.length()>1) {
 

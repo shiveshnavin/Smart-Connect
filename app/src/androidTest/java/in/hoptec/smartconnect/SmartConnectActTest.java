@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,14 +38,14 @@ public class SmartConnectActTest {
         protected Intent getActivityIntent() {
             InstrumentationRegistry.getTargetContext();
             Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.putExtra("emulatedResp", getNormalResponse().toString());
+            intent.putExtra("testMode",1);
+            intent.putExtra("emulatedResp", getEmulatedResponse() );
             return intent;
         }
     };
-    ;
 
 
-    public JSONObject getNormalResponse()
+    public String getEmulatedResponse()
     {
         JSONObject job=new JSONObject();
         try {
@@ -59,7 +58,7 @@ public class SmartConnectActTest {
         }
 
 
-        return job ;
+        return "{}" ;
 
     }
 
@@ -79,9 +78,19 @@ public class SmartConnectActTest {
         totalFlowValue =(TextView) smartConnectActivity.findViewById(R.id.tf_ic);
 
 
-        assertEquals("TDS Test . Actual : "+tdsIn.getText().toString(),
+        assertEquals("tdsIn Test . Actual : "+tdsIn.getText().toString(),
                 "0300",
                 tdsIn.getText().toString());
+
+
+        assertEquals("tdsOut Test . Actual : "+tdsOut.getText().toString(),
+                "0180",
+                tdsOut.getText().toString());
+
+
+        assertEquals("totalFlowValue Test . Actual : "+totalFlowValue.getText().toString(),
+                "40 L",
+                totalFlowValue.getText().toString());
 
 
     }
