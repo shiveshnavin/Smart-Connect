@@ -53,6 +53,8 @@ import org.json.JSONObject;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import in.hoptec.smartconnect.utils.ApManager;
 
@@ -65,6 +67,7 @@ public class SmartConnectActivity extends AppCompatActivity {
     private String AP_NAME = "SmartRo";
     private String AP_PASS = "password";
     private String API_KEY = "AEZAKMI";
+
 
     private boolean scanDone = false;
     private boolean scanInitiatedByApp = false;
@@ -94,6 +97,7 @@ public class SmartConnectActivity extends AppCompatActivity {
 
     private int appBarHeight = 200;
     private long FAB_ANIM_DUR = 400;
+    private long DELAY=1000;
 
     private boolean isWaterFlowing = false, isPumpOn = false, animate = true;
     private Handler animHandler = new Handler();
@@ -193,6 +197,16 @@ public class SmartConnectActivity extends AppCompatActivity {
         fabDisconnect.animate().alpha(0f);
 
 
+        refreshButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if(DELAY==1000)
+                    DELAY=10000;
+                else
+                    DELAY=1000;
+                return false;
+            }
+        });
         initNavigationDrawer();
         ;
         expandToolbar();
@@ -923,7 +937,8 @@ public class SmartConnectActivity extends AppCompatActivity {
             jsonObject = new JSONObject(res);
         } catch (Exception e) {
 
-            e.printStackTrace();
+
+
 
         }
         if (jsonObject == null) {
@@ -942,7 +957,19 @@ public class SmartConnectActivity extends AppCompatActivity {
         }
 
 
+        if(!running )
+            tm.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    utl.e("RUNNIG NOW");
 
+                    getWaterFlowData();
+                    running=true;
+
+
+
+                }
+            },DELAY);
         //{"free_ram":26468,"total_ram":52000,"tds_1":0,"tds_0":4,"rps":0,"pump_power":true,"ro_power":true,"water_flow":true}
 
 
@@ -997,19 +1024,20 @@ public class SmartConnectActivity extends AppCompatActivity {
 
 
 };
+    boolean running=false;
+
+    JSONObject jsonObject=null;
+    Handler tm=new Handler();
     public void parse(String  res,boolean isWaterFlowing) throws Exception
     {
-        JSONObject jsonObject=null;
         try{
             jsonObject=new JSONObject(res);
         }catch (Exception e)
         {
 
+
+
         }
-
-
-        Thread th=new Thread();
-        th.s
 
 
 
@@ -1029,6 +1057,8 @@ public class SmartConnectActivity extends AppCompatActivity {
 
             return;
         }
+
+
 
         String re = "_____\n" +
                 "\n" + "Free RAM : " + jsonObject.getString("free_ram") +
