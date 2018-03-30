@@ -3,10 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    xmlns:gauge="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nest"
     android:background="@color/white"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <RelativeLayout
         android:orientation="vertical"
@@ -227,6 +228,22 @@
 
 
 
+            <in.hoptec.smartconnect.utils.GaugeView
+                android:id="@+id/gauge_view"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:background="#ffffff"
+                gauge:showOuterShadow="false"
+                gauge:showOuterRim="false"
+                gauge:showInnerRim="false"
+                gauge:needleWidth="0.010"
+                gauge:needleHeight="0.40"
+                gauge:scaleStartValue="0"
+                gauge:scaleEndValue="500"
+                android:layout_marginTop="30dp"
+                />
+
+
 
 
 
@@ -394,8 +411,6 @@
 
 
 
-
-
             <com.daniribalbert.customfontlib.views.CustomFontTextView
                 app:font="Avenir-Medium"
                  android:id="@+id/logs"
@@ -408,7 +423,7 @@
                 android:textSize="15sp"
 
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="100dp" />
 
 
 

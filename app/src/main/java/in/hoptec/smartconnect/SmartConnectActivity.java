@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Canvas;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -17,6 +18,7 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -57,6 +59,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import in.hoptec.smartconnect.utils.ApManager;
+import in.hoptec.smartconnect.utils.GaugeView;
 
 public class SmartConnectActivity extends AppCompatActivity {
 
@@ -91,6 +94,7 @@ public class SmartConnectActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private FloatingActionButton fabConnect, fabDisconnect;
+    private GaugeView mGaugeView;
 
     private Context ctx;
     private Activity act;
@@ -155,6 +159,7 @@ public class SmartConnectActivity extends AppCompatActivity {
         waterFlowIcon = (ImageView) findViewById(R.id.wf_ic);
         pumpIcon = (ImageView) findViewById(R.id.pm_ic);
 
+        mGaugeView = (GaugeView) findViewById(R.id.gauge_view);
 
         String emulatedResp = getIntent().getStringExtra("emulatedResp");
         int testMode = getIntent().getIntExtra("testMode", 0);
@@ -956,6 +961,7 @@ public class SmartConnectActivity extends AppCompatActivity {
             return;
         }
 
+        //mTimer.start();
 
         if(!running )
             tm.postDelayed(new Runnable() {
@@ -985,6 +991,8 @@ public class SmartConnectActivity extends AppCompatActivity {
         re.roPower=jsonObject.getBoolean("ro_power");
         re.waterFlow=jsonObject.getBoolean("water_flow");
 
+
+        mGaugeView.setTargetValue(new Float(re.rps));
                     tdsIn.setText(""+re.tds0);
                     tdsOut.setText(""+re.tds1);
 
@@ -1014,7 +1022,7 @@ public class SmartConnectActivity extends AppCompatActivity {
                     logTextView.setText("Device Connected\nSensor API Response\n"+res);
 
 
-                    logTextView.setVisibility(View.GONE);
+                    logTextView.setVisibility(View.INVISIBLE);
 
 
                     animHandler.postDelayed(animatorThread,700);
@@ -1193,5 +1201,36 @@ public class SmartConnectActivity extends AppCompatActivity {
         @Expose
         public Integer flow;
     }
+
+
+    public boolean allGood=false;
+    TimerTask timerTask;
+    Timer timer=new Timer();
+
+    private void initializeTimerTask() {
+        timerTask = new TimerTask() {
+            @Override
+        public void run() {
+
+                if(allGood){
+
+
+                    getWaterFlowData();
+            timer.schedule(timerTask, DELAY); }
+        }
+        };
+        timer.schedule(timerTask, DELAY);
+    }
+    private final CountDownTimer mTimer = new CountDownTimer(30000, 1000) {
+
+        @Override
+        public void onTick(final long millisUntilFinished) {
+            mGaugeView.setTargetValue(utl.getRandomIntInRange(100,10));
+        }
+
+        @Override
+        public void onFinish() {}
+    };
+
 
 }
