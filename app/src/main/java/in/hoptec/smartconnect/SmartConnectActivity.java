@@ -177,6 +177,7 @@ public class SmartConnectActivity extends AppCompatActivity {
             }
         }
 
+        initializeTimerTask();
 
         mWifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
 
@@ -226,6 +227,8 @@ public class SmartConnectActivity extends AppCompatActivity {
     protected void onDestroy() {
 
         try {
+
+            stop();
 
             unRegister();
 
@@ -958,11 +961,12 @@ public class SmartConnectActivity extends AppCompatActivity {
             totalFlowValue.setText("-- L");
 
 
+            allGood=false;
             return;
         }
 
         //mTimer.start();
-
+/*
         if(!running )
             tm.postDelayed(new Runnable() {
                 @Override
@@ -975,7 +979,9 @@ public class SmartConnectActivity extends AppCompatActivity {
 
 
                 }
-            },DELAY);
+            },DELAY);*/
+
+            allGood=true;
         //{"free_ram":26468,"total_ram":52000,"tds_1":0,"tds_0":4,"rps":0,"pump_power":true,"ro_power":true,"water_flow":true}
 
 
@@ -1207,19 +1213,38 @@ public class SmartConnectActivity extends AppCompatActivity {
     TimerTask timerTask;
     Timer timer=new Timer();
 
-    private void initializeTimerTask() {
-        timerTask = new TimerTask() {
-            @Override
+
+    private boolean started = false;
+    private Handler handler = new Handler();
+
+    private Runnable runnable = new Runnable() {
+        @Override
         public void run() {
 
-                if(allGood){
 
-
-                    getWaterFlowData();
-            timer.schedule(timerTask, DELAY); }
+              getWaterFlowData();
+            if(started) {
+                start();
+            }
         }
-        };
-        timer.schedule(timerTask, DELAY);
+    };
+
+    public void stop() {
+        started = false;
+        handler.removeCallbacks(runnable);
+    }
+
+    public void start() {
+        started = true;
+        handler.postDelayed(runnable, 2000);
+    }
+
+
+    private void initializeTimerTask() {
+
+
+
+        start();
     }
     private final CountDownTimer mTimer = new CountDownTimer(30000, 1000) {
 

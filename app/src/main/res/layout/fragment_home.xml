@@ -228,6 +228,22 @@
 
 
 
+
+            <com.daniribalbert.customfontlib.views.CustomFontTextView
+                app:font="Avenir-Medium"
+                android:layout_weight="0.8"
+                android:id="@+id/speed"
+                android:layout_gravity="center"
+                android:padding="15dp"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:text="TACHOMETER"
+                android:textSize="15sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+
             <in.hoptec.smartconnect.utils.GaugeView
                 android:id="@+id/gauge_view"
                 android:layout_width="match_parent"
@@ -240,7 +256,6 @@
                 gauge:needleHeight="0.40"
                 gauge:scaleStartValue="0"
                 gauge:scaleEndValue="500"
-                android:layout_marginTop="30dp"
                 />
 
 
