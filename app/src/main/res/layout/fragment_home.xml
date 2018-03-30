@@ -255,7 +255,7 @@
                 gauge:needleWidth="0.010"
                 gauge:needleHeight="0.40"
                 gauge:scaleStartValue="0"
-                gauge:scaleEndValue="500"
+                gauge:scaleEndValue="250"
                 />
 
 

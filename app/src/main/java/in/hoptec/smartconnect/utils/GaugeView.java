@@ -79,7 +79,8 @@ public class GaugeView extends View {
             Color.argb(5, 255, 255, 255)};
     public static final float[] OUTER_SHADOW_POS = {0.90f, 0.95f, 0.99f};
 
-    public static final float[] RANGE_VALUES = {32.0f, 125.0f, 240.0f, 500.0f};
+   // public static final float[] RANGE_VALUES = {32.0f, 125.0f, 240.0f, 500.0f};
+    public static final float[] RANGE_VALUES = {16.0f, 75.0f, 150.0f, 250.0f};
     public static final int[] RANGE_COLORS = {Color.rgb(0, 0, 0), Color.rgb(0, 0, 0), Color.rgb(0, 0, 0),
             Color.rgb(0, 0, 0)};
 
