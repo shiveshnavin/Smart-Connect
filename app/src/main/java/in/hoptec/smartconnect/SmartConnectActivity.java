@@ -44,10 +44,14 @@ import android.widget.Toast;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import in.hoptec.smartconnect.utils.ApManager;
@@ -56,9 +60,9 @@ public class SmartConnectActivity extends AppCompatActivity {
 
     /******WIFI CONNECTION VARS******/
     private String MONG_HOST_IP = "http://192.168.4.1";
-/*    private String AP_NAME = "JioFi2_00C3E7";
-    private String AP_PASS = "ytf47mnfjn";*/
-    private String AP_NAME = "MONG_TEST";
+    /*    private String AP_NAME = "JioFi2_00C3E7";
+        private String AP_PASS = "ytf47mnfjn";*/
+    private String AP_NAME = "SmartRo";
     private String AP_PASS = "password";
     private String API_KEY = "AEZAKMI";
 
@@ -88,23 +92,23 @@ public class SmartConnectActivity extends AppCompatActivity {
     private Context ctx;
     private Activity act;
 
-    private int appBarHeight=200;
-    private long FAB_ANIM_DUR=400;
+    private int appBarHeight = 200;
+    private long FAB_ANIM_DUR = 400;
 
-    private boolean isWaterFlowing=false,isPumpOn=false,animate=true;
-    private Handler animHandler=new Handler();
+    private boolean isWaterFlowing = false, isPumpOn = false, animate = true;
+    private Handler animHandler = new Handler();
 
-    Runnable animatorThread =new Runnable() {
+    Runnable animatorThread = new Runnable() {
         @Override
         public void run() {
 
-            if(isPumpOn)
+            if (isPumpOn)
                 utl.animate_avd(pumpIcon);
-            if(isWaterFlowing)
+            if (isWaterFlowing)
                 utl.animate_avd(waterFlowIcon);
 
-            if(animate)
-                animHandler.postDelayed(animatorThread,700);
+            if (animate)
+                animHandler.postDelayed(animatorThread, 700);
 
         }
     };
@@ -123,63 +127,58 @@ public class SmartConnectActivity extends AppCompatActivity {
 
         setTitle("");
 
-        appBarLayout=(AppBarLayout)findViewById(R.id.app_bar);
-        header=(LinearLayout)findViewById(R.id.header);
-        drawerLayout=(DrawerLayout)findViewById(R.id.drawer);
+        appBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
+        header = (LinearLayout) findViewById(R.id.header);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
         fabConnect = (FloatingActionButton) findViewById(R.id.fab);
         fabDisconnect = (FloatingActionButton) findViewById(R.id.fab2);
-        logTextView=(TextView)findViewById(R.id.logs);
-        coordinatorLayout=(CoordinatorLayout)findViewById(R.id.cont);
-        wifiActionIndicator=(ImageView)findViewById(R.id.wifiAction);
-        disconnectButton=(LinearLayout)findViewById(R.id.disconnect);
-        connectButton=(LinearLayout)findViewById(R.id.connect);
-        refreshButton=(LinearLayout)findViewById(R.id.refresh);
+        logTextView = (TextView) findViewById(R.id.logs);
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.cont);
+        wifiActionIndicator = (ImageView) findViewById(R.id.wifiAction);
+        disconnectButton = (LinearLayout) findViewById(R.id.disconnect);
+        connectButton = (LinearLayout) findViewById(R.id.connect);
+        refreshButton = (LinearLayout) findViewById(R.id.refresh);
 
-        tdsIn =(TextView) findViewById(R.id.tds_in);
-        tdsOut =(TextView) findViewById(R.id.tds_out);
-        waterFlow =(TextView) findViewById(R.id.wf);
-        power =(TextView) findViewById(R.id.pw);
-        totalFlow =(TextView) findViewById(R.id.tf);
-        pump =(TextView) findViewById(R.id.pm);
-        totalFlowValue =(TextView) findViewById(R.id.tf_ic);
+        tdsIn = (TextView) findViewById(R.id.tds_in);
+        tdsOut = (TextView) findViewById(R.id.tds_out);
+        waterFlow = (TextView) findViewById(R.id.wf);
+        power = (TextView) findViewById(R.id.pw);
+        totalFlow = (TextView) findViewById(R.id.tf);
+        pump = (TextView) findViewById(R.id.pm);
+        totalFlowValue = (TextView) findViewById(R.id.tf_ic);
 
-        powerIcon =(ImageView) findViewById(R.id.pw_ic);
-        waterFlowIcon =(ImageView) findViewById(R.id.wf_ic);
-        pumpIcon =(ImageView) findViewById(R.id.pm_ic);
+        powerIcon = (ImageView) findViewById(R.id.pw_ic);
+        waterFlowIcon = (ImageView) findViewById(R.id.wf_ic);
+        pumpIcon = (ImageView) findViewById(R.id.pm_ic);
 
 
-        String emulatedResp=getIntent().getStringExtra("emulatedResp");
-        int testMode=getIntent().getIntExtra("testMode",0);
+        String emulatedResp = getIntent().getStringExtra("emulatedResp");
+        int testMode = getIntent().getIntExtra("testMode", 0);
 
-        if(testMode==1)
-        {
-            isAppInDisconnectionMode=true;
-            utl.e("TEST","APP IN TESTING MODE emulatedResp = "+emulatedResp);
-            try{
+        if (testMode == 1) {
+            isAppInDisconnectionMode = true;
+            utl.e("TEST", "APP IN TESTING MODE emulatedResp = " + emulatedResp);
+            try {
 
                 parse(emulatedResp);
 
 
-            }catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
 
-
-
-
-        mWifiManager = (WifiManager) act.getSystemService(WIFI_SERVICE);
+        mWifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
 
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 
-                Integer verticalOffsetNormalized=-1*verticalOffset;
+                Integer verticalOffsetNormalized = -1 * verticalOffset;
 
-                Float alphaHeader=1.0f-verticalOffsetNormalized.floatValue()/ appBarHeight;
-                Float alphaFAB=verticalOffsetNormalized.floatValue()/ appBarHeight;
+                Float alphaHeader = 1.0f - verticalOffsetNormalized.floatValue() / appBarHeight;
+                Float alphaFAB = verticalOffsetNormalized.floatValue() / appBarHeight;
 
                 fabConnect.animate().setDuration(FAB_ANIM_DUR).alpha(alphaFAB);
                 fabDisconnect.animate().setDuration(FAB_ANIM_DUR).alpha(alphaFAB);
@@ -194,7 +193,8 @@ public class SmartConnectActivity extends AppCompatActivity {
         fabDisconnect.animate().alpha(0f);
 
 
-        initNavigationDrawer();;
+        initNavigationDrawer();
+        ;
         expandToolbar();
         initOnCLickListeners();
 
@@ -282,7 +282,6 @@ public class SmartConnectActivity extends AppCompatActivity {
             public void onError(ANError ANError) {
 
 
-
                 try {
                     parse(null);
                 } catch (Exception e) {
@@ -300,11 +299,10 @@ public class SmartConnectActivity extends AppCompatActivity {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
-    private void addPressReleaseAnimation(final View base)
-    {
+    private void addPressReleaseAnimation(final View base) {
 
-        final Animation press= AnimationUtils.loadAnimation(ctx,R.anim.rec_zoom_in);
-        final Animation release= AnimationUtils.loadAnimation(ctx,R.anim.rec_zoom_nomal);
+        final Animation press = AnimationUtils.loadAnimation(ctx, R.anim.rec_zoom_in);
+        final Animation release = AnimationUtils.loadAnimation(ctx, R.anim.rec_zoom_nomal);
 
         base.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -328,7 +326,6 @@ public class SmartConnectActivity extends AppCompatActivity {
                 }
 
 
-
                 return false;
             }
         });
@@ -336,8 +333,7 @@ public class SmartConnectActivity extends AppCompatActivity {
 
     }
 
-    private void initOnCLickListeners()
-    {
+    private void initOnCLickListeners() {
 
         connectButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -348,7 +344,6 @@ public class SmartConnectActivity extends AppCompatActivity {
         addPressReleaseAnimation(connectButton);
 
 
-
         disconnectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -356,7 +351,6 @@ public class SmartConnectActivity extends AppCompatActivity {
             }
         });
         addPressReleaseAnimation(disconnectButton);
-
 
 
         refreshButton.setOnClickListener(new View.OnClickListener() {
@@ -392,54 +386,50 @@ public class SmartConnectActivity extends AppCompatActivity {
         });
 
 
-
     }
 
-    private void expandToolbar()
-    {
+    private void expandToolbar() {
 
 
         fabConnect.animate().setDuration(FAB_ANIM_DUR).alpha(0f);
         fabDisconnect.animate().setDuration(FAB_ANIM_DUR).alpha(0f);
 
 
-
     }
 
-    private void initNavigationDrawer()
-    {
+    private void initNavigationDrawer() {
 
-        final NavigationView navigationView = (NavigationView)findViewById(R.id.navigation_view);
+        final NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.postDelayed(new Runnable() {
             @Override
             public void run() {
 
-                logo=(ImageView)navigationView.getHeaderView(0).findViewById(R.id.logo);
+                logo = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.logo);
                 logo.setVisibility(View.INVISIBLE);
 
             }
-        },400);
+        }, 400);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
 
                 int id = menuItem.getItemId();
-                switch (id){
+                switch (id) {
                     case R.id.home:
-                        Toast.makeText(getApplicationContext(),"Home",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Home", Toast.LENGTH_SHORT).show();
                         drawerLayout.closeDrawers();
                         break;
                     case R.id.sensors:
-                        Toast.makeText(getApplicationContext(),"Sensors",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Sensors", Toast.LENGTH_SHORT).show();
                         drawerLayout.closeDrawers();
                         break;
                     case R.id.reset:
-                        Toast.makeText(getApplicationContext(),"Reset", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Reset", Toast.LENGTH_SHORT).show();
                         reset();
                         drawerLayout.closeDrawers();
                         break;
                     case R.id.about:
-                        Toast.makeText(getApplicationContext(),"About", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "About", Toast.LENGTH_SHORT).show();
                         drawerLayout.closeDrawers();
                         break;
 
@@ -449,15 +439,15 @@ public class SmartConnectActivity extends AppCompatActivity {
         });
 
         View header = navigationView.getHeaderView(0);
-        TextView versionTextView = (TextView)header.findViewById(R.id.tv_email);
-        versionTextView.setText("v"+BuildConfig.VERSION_NAME);
-        drawerLayout = (DrawerLayout)findViewById(R.id.drawer);
+        TextView versionTextView = (TextView) header.findViewById(R.id.tv_email);
+        versionTextView.setText("v" + BuildConfig.VERSION_NAME);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
 
-        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.drawer_open,R.string.drawer_close){
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
 
             @Override
-            public void onDrawerClosed(View v){
-                final ImageView logo=(ImageView)v.findViewById(R.id.logo);
+            public void onDrawerClosed(View v) {
+                final ImageView logo = (ImageView) v.findViewById(R.id.logo);
 
                 logo.setVisibility(View.INVISIBLE);
                 super.onDrawerClosed(v);
@@ -467,7 +457,7 @@ public class SmartConnectActivity extends AppCompatActivity {
             public void onDrawerOpened(View v) {
                 super.onDrawerOpened(v);
 
-                final ImageView logo=(ImageView)v.findViewById(R.id.logo);
+                final ImageView logo = (ImageView) v.findViewById(R.id.logo);
 
                 utl.animate_avd(logo);
                 try {
@@ -477,7 +467,7 @@ public class SmartConnectActivity extends AppCompatActivity {
                             logo.setVisibility(View.VISIBLE);
 
                         }
-                    },50);
+                    }, 50);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -492,7 +482,7 @@ public class SmartConnectActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            if(isAppInDisconnectionMode)
+            if (isAppInDisconnectionMode)
                 return;
 
             SupplicantState newState = intent.getParcelableExtra(WifiManager.EXTRA_NEW_STATE);
@@ -523,9 +513,8 @@ public class SmartConnectActivity extends AppCompatActivity {
                     break;
                 case DISCONNECTED:
 
-                    if(!checkWifiOnAndConnected())
-                    {
-                        connected=false;
+                    if (!checkWifiOnAndConnected()) {
+                        connected = false;
                     }
                     if (!connected) {
 
@@ -551,7 +540,7 @@ public class SmartConnectActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
 
 
-            if(isAppInDisconnectionMode)
+            if (isAppInDisconnectionMode)
                 return;
 
 
@@ -560,9 +549,8 @@ public class SmartConnectActivity extends AppCompatActivity {
 
             switch (extraWifiState) {
                 case WifiManager.WIFI_STATE_DISABLED:
-                    connected=false;
+                    connected = false;
                     onStateDisConnected();
-
 
 
                     mWifiManager.setWifiEnabled(true);
@@ -573,11 +561,11 @@ public class SmartConnectActivity extends AppCompatActivity {
                     break;
                 case WifiManager.WIFI_STATE_ENABLED:
 
-                        scanInitiatedByApp = true;
-                        mWifiManager.startScan();
+                    scanInitiatedByApp = true;
+                    mWifiManager.startScan();
 
-                        if (!scanDone) {
-                        }
+                    if (!scanDone) {
+                    }
                     utl.l("WIFI_", "WIFI STATE ENABLED");
 
                     break;
@@ -599,7 +587,7 @@ public class SmartConnectActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
 
 
-            if(isAppInDisconnectionMode)
+            if (isAppInDisconnectionMode)
                 return;
 
 
@@ -648,7 +636,7 @@ public class SmartConnectActivity extends AppCompatActivity {
         public void onReceive(Context c, Intent intent) {
 
 
-            if(isAppInDisconnectionMode)
+            if (isAppInDisconnectionMode)
                 return;
 
 
@@ -674,8 +662,8 @@ public class SmartConnectActivity extends AppCompatActivity {
 
                 if (ssids.contains(AP_NAME))
                     connect(AP_NAME, AP_PASS);
-                else{
-                    isAppInDisconnectionMode=true;
+                else {
+                    isAppInDisconnectionMode = true;
                     logTextView.setText("Device Not in Range ! \nPlease Make Sure Device is turned on and " +
                             "is in Range and refresh .");
 
@@ -689,10 +677,8 @@ public class SmartConnectActivity extends AppCompatActivity {
     };
 
 
-
-
     private boolean checkWifiOnAndConnected() {
-        WifiManager wifiMgr = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        WifiManager wifiMgr = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
         if (wifiMgr.isWifiEnabled()) { // Wi-Fi adapter is ON
 
@@ -707,8 +693,7 @@ public class SmartConnectActivity extends AppCompatActivity {
         }
     }
 
-    private void reset()
-    {
+    private void reset() {
 
 
         logTextView.setText("[RESET]");
@@ -719,42 +704,37 @@ public class SmartConnectActivity extends AppCompatActivity {
 
                 connect();
             }
-        },1000);
+        }, 1000);
 
 
     }
 
-    private void connect()
-    {
-        isAppInDisconnectionMode =false;
-        utl.snack(coordinatorLayout,"Connecting !");
+    private void connect() {
+        isAppInDisconnectionMode = false;
+        utl.snack(coordinatorLayout, "Connecting !");
         startConnection();
 
     }
 
-    private void refresh()
-    {
+    private void refresh() {
 
-        if(checkWifiOnAndConnected()&&getCurrentNetwork().contains(AP_NAME))
-        {
+        if (checkWifiOnAndConnected() && getCurrentNetwork().contains(AP_NAME)) {
             getWaterFlowData();
-        }
-        else {
-            connected=false;
-            isAppInDisconnectionMode =false;
-            utl.snack(coordinatorLayout,"Refreshing !");
+        } else {
+            connected = false;
+            isAppInDisconnectionMode = false;
+            utl.snack(coordinatorLayout, "Refreshing !");
             startConnection();
         }
 
     }
 
-    private void disconnect()
-    {
+    private void disconnect() {
 
-        isAppInDisconnectionMode =true;
+        isAppInDisconnectionMode = true;
 
 
-        connected=false;
+        connected = false;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             cm.bindProcessToNetwork(null);
@@ -767,19 +747,19 @@ public class SmartConnectActivity extends AppCompatActivity {
         mWifiManager.disconnect();
 
 
-
-         WifiManager wifiManager = (WifiManager)getSystemService(WIFI_SERVICE);
+        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
 
         wifiManager.removeNetwork(netId);
 
-        utl.e("WIFI_","Removing Net Id : "+netId);
+        utl.e("WIFI_", "Removing Net Id : " + netId);
 
         onStateDisConnected();
-        utl.snack(coordinatorLayout,"Disconnecting !");
+        utl.snack(coordinatorLayout, "Disconnecting !");
         unRegister();
-     }
+    }
 
-    int netId=-1;
+    int netId = -1;
+
     private void connect(String ssid, String key) {
 
         utl.e("Connecting to Wifi : " + ssid + " : " + key);
@@ -859,9 +839,10 @@ public class SmartConnectActivity extends AppCompatActivity {
     }
 
     ConnectivityManager cm;
+
     private void bindNetwork() {
 
-       cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkRequest request = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
@@ -869,7 +850,7 @@ public class SmartConnectActivity extends AppCompatActivity {
                     .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
                     .build();
 
-              ConnectivityManager.NetworkCallback callback = new ConnectivityManager.NetworkCallback() {
+            ConnectivityManager.NetworkCallback callback = new ConnectivityManager.NetworkCallback() {
 
                 @Override
                 public void onAvailable(Network network) {
@@ -896,7 +877,7 @@ public class SmartConnectActivity extends AppCompatActivity {
                             getWaterFlowData();
 
                         }
-                    },5000);
+                    }, 5000);
 
                     animHandler.postDelayed(new Runnable() {
                         @Override
@@ -905,10 +886,10 @@ public class SmartConnectActivity extends AppCompatActivity {
                             getWaterFlowData();
 
                         }
-                    },10000);
+                    }, 10000);
 
                     getWaterFlowData();
-                    utl.e("WIFI_","Wifi IP Add is "+ getDeviceipWiFiData());
+                    utl.e("WIFI_", "Wifi IP Add is " + getDeviceipWiFiData());
                 }
 
             };
@@ -918,10 +899,9 @@ public class SmartConnectActivity extends AppCompatActivity {
 
     }
 
-    public String getDeviceipWiFiData()
-    {
+    public String getDeviceipWiFiData() {
 
-        WifiManager wm = (WifiManager) getSystemService(WIFI_SERVICE);
+        WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
 
         @SuppressWarnings("deprecation")
 
@@ -932,7 +912,92 @@ public class SmartConnectActivity extends AppCompatActivity {
     }
 
 
-    public void parse(String  res) throws Exception
+    private void parse(String res) throws Exception {
+
+       wifiActionIndicator.setImageResource(R.drawable.avd_coc);
+        ;
+
+        JSONObject jsonObject = null;
+
+        try {
+            jsonObject = new JSONObject(res);
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        }
+        if (jsonObject == null) {
+
+            tdsIn.setText("----");
+            tdsOut.setText("----");
+            powerIcon.setImageResource(R.drawable.vd_power_off);
+            utl.animate_avd_stop(waterFlowIcon);
+            isWaterFlowing = false;
+            isPumpOn = false;
+            animate = false;
+            totalFlowValue.setText("-- L");
+
+
+            return;
+        }
+
+
+
+        //{"free_ram":26468,"total_ram":52000,"tds_1":0,"tds_0":4,"rps":0,"pump_power":true,"ro_power":true,"water_flow":true}
+
+
+        Response re=new Response();
+
+        re.tds0=jsonObject.getInt("tds_0");
+        re.tds1=jsonObject.getInt("tds_1");
+        re.freeRam=jsonObject.getInt("free_ram");
+        re.totalRam=jsonObject.getInt("total_ram");
+        re.flow=jsonObject.getInt("flow");
+        re.rps=jsonObject.getInt("rps");
+        re.pumpPower=jsonObject.getBoolean("pump_power");
+        re.roPower=jsonObject.getBoolean("ro_power");
+        re.waterFlow=jsonObject.getBoolean("water_flow");
+
+                    tdsIn.setText(""+re.tds0);
+                    tdsOut.setText(""+re.tds1);
+
+                    if (re.roPower ) {
+
+                        powerIcon.setImageResource(R.drawable.vd_power_on);
+
+                    } else {
+                        powerIcon.setImageResource(R.drawable.vd_power_off);
+
+                    }
+
+                    if (re.waterFlow) {
+                        isWaterFlowing = true;
+                    }
+
+
+                    if (re.pumpPower) {
+                        isPumpOn = true;
+                    }
+
+
+                    totalFlowValue.setText( ""+(re.flow) + " L");
+
+
+
+                    logTextView.setText("Device Connected\nSensor API Response\n"+res);
+
+
+                    logTextView.setVisibility(View.GONE);
+
+
+                    animHandler.postDelayed(animatorThread,700);
+
+
+
+
+
+};
+    public void parse(String  res,boolean isWaterFlowing) throws Exception
     {
         JSONObject jsonObject=null;
         try{
@@ -941,6 +1006,14 @@ public class SmartConnectActivity extends AppCompatActivity {
         {
 
         }
+
+
+        Thread th=new Thread();
+        th.s
+
+
+
+
         if(jsonObject==null)
         {
 
@@ -1037,6 +1110,8 @@ public class SmartConnectActivity extends AppCompatActivity {
 
     }
 
+
+
     private void onStateConnected()
     {
         logTextView.setText("Connected !");
@@ -1056,6 +1131,37 @@ public class SmartConnectActivity extends AppCompatActivity {
         wifiActionIndicator.setImageResource(R.drawable.avd_conn);
         utl.animate_avd(wifiActionIndicator);
 
+    }
+
+    public class Response{
+
+        @SerializedName("free_ram")
+        @Expose
+        public Integer freeRam;
+        @SerializedName("total_ram")
+        @Expose
+        public Integer totalRam;
+        @SerializedName("tds_1")
+        @Expose
+        public Integer tds1;
+        @SerializedName("tds_0")
+        @Expose
+        public Integer tds0;
+        @SerializedName("rps")
+        @Expose
+        public Integer rps;
+        @SerializedName("pump_power")
+        @Expose
+        public Boolean pumpPower;
+        @SerializedName("ro_power")
+        @Expose
+        public Boolean roPower;
+        @SerializedName("water_flow")
+        @Expose
+        public Boolean waterFlow;
+        @SerializedName("flow")
+        @Expose
+        public Integer flow;
     }
 
 }
